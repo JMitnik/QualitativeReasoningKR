@@ -1,0 +1,33 @@
+{
+    "entities":{
+        "inlet": {"inflow":"MagTwo", "d":"MagThree"},
+        "container":{"volume":"MagThree", "d":"DThree"},
+        "outlet":{"outflow":"MagThree", "d":"DThree"}
+    },
+    "relations":{
+        "1":{
+            "ty":"I+",
+            "args":"None",
+            "from":"inlet",
+            "to":"container"
+        },
+        "2":{
+            "ty":"I-",
+            "args":"None",
+            "from":"inlet",
+            "to":"container"
+        },
+        "3":{
+            "ty":"I+",
+            "args":"None",
+            "from":"inlet",
+            "to":"container"
+        },
+        "4":{
+            "ty":"I+",
+            "args":"None",
+            "from":"inlet",
+            "to":"container"
+        }
+    }
+}
