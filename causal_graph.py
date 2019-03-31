@@ -11,6 +11,7 @@ class CausalGraph(object):
         entities_specs = specs['entities']
         relations_specs = specs['relations']
         init_vals = specs['init_state']
+        
         for entity_name in entities_specs:
             entity_spec = entities_specs[entity_name]
             init_val = init_vals[entity_name]

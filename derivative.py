@@ -1,7 +1,17 @@
-class Derivative(object):
-    def __init__(self, name, space, init_val):
-        self.name = name
-        self.space = space
-        self.init_val = init_val
-    def __repr__(self):
-        return '{}\n\t space:{}\t init:{}\n'.format(self.name, self.space, self.init_val)
+from dataclasses import dataclass
+from enum import Enum
+
+class DerivativeQSpace(Enum):
+    MIN = -1
+    ZERO = 0
+    POS = 1
+
+@dataclass
+class Derivative:
+    space: EnumMeta = DerivativeQSpace
+    name: str = ''
+    init_val: DerivativeQSpace = DerivativeQSpace.ZERO
+
+if __name__ == "__main__":
+    test = Derivative()
+    test.init_val

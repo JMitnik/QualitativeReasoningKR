@@ -14,3 +14,6 @@ class DThree(Enum):
     ZERO = 1
     PLUS = 2
     MAX = 3
+
+class MagSpace:
+    enum

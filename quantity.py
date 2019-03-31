@@ -1,4 +1,9 @@
-class Quantity(object):
+from dataclasses import dataclass
+
+@dataclass
+class Quantity:
+    name: str
+    q_space: 
     def __init__(self, name, space, init_val):
         self.name = name
         self.space = space

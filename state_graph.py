@@ -1,5 +1,7 @@
-class StateGraph(object):
-    def __init__(self, causal_graph):
-        self.causal_graph = causal_graph
-        self.root = None
-        
+from dataclasses import dataclass
+from causal_graph import CausalGraph
+
+@dataclass
+class StateGraph:
+    causal_graph: CausalGraph
+    root: Node = None
