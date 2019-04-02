@@ -1,15 +1,22 @@
 from collections.abc import MutableSet
-
+from dataclasses import dataclass
+from quantity import Quantity
+@dataclass
+class Entity:
+    name: str
+    quantity: Quantity
 class Entity(object):
     def __init__(self, name, quantity, derivative):
         self.name = name
         self.quantity = quantity
-        self.derivative = derivative
-    def __repr__(self):
-        return '{}\n\t quantity:{}\t derivative:{}\n'.format(self.name, self.quantity, self.derivative)
 
     def from_tuple(self, tuple):
-        # Convert tuple to e
+        # TODO: Convert tuple to hashable object
+        pass
+    
+    def to_tuple(self):
+        # TODO: Convert to tuple
+        pass
 
 if __name__ == "__main__":
     test_set = MutableSet()
