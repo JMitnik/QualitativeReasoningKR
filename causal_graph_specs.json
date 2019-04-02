@@ -1,33 +1,33 @@
 {
-    "entities": {
-        "inflow": { "mag_value": "2", "mag_q_space": "3", "d_value": "1" },
-        "container": { "mag_value": "0", "mag_q_space": "3", "d_value": "0" },
-        "outflow": { "mag_value": "0", "mag_q_space": "3", "d_value": "0" }
-    },
-    "relations": {
-        "1": {
+    "entities": [
+        { "title": "inflow", "mag_value": "2", "mag_q_space": "3", "d_value": "1" },
+        { "title": "container", "mag_value": "0", "mag_q_space": "3", "d_value": "0" },
+        { "title": "outflow", "mag_value": "0", "mag_q_space": "3", "d_value": "0" }
+    ],
+    "relations": [
+        {
             "ty": "I+",
             "args": "None",
             "from": "inflow",
             "to": "container"
         },
-        "2": {
+        {
             "ty": "I-",
             "args": "None",
             "from": "inflow",
             "to": "container"
         },
-        "3": {
+        {
             "ty": "I+",
             "args": "None",
             "from": "inflow",
             "to": "container"
         },
-        "4": {
+        {
             "ty": "I+",
             "args": "None",
             "from": "inflow",
             "to": "container"
         }
-    }
+    ]
 }

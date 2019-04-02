@@ -13,3 +13,8 @@ class DerivativeSpace(Enum):
     NEG = -1
     ZERO = 0
     PLUS = 1
+
+mag_q_space = {
+    '2': MagTwoSpace,
+    '3': MagThreeSpace
+}

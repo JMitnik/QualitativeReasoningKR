@@ -5,6 +5,5 @@
 - [ ] Generate all current states from current state
 - [ ] Draw node chart using PyViz (?)
 
-
 ## Problems to decide:
 - [ ] How are we going to resolve ambiguities with current derivatives?
