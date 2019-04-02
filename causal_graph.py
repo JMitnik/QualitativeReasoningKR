@@ -1,7 +1,5 @@
 from entity import Entity
 from quantity import Quantity
-from derivative import Derivative
-from relation import Relation
 
 class CausalGraph(object):
     def __init__(self, specs):

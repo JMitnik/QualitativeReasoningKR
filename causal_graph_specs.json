@@ -1,33 +1,33 @@
 {
-    "entities":{
-        "inlet": {"inflow":"MagTwo", "d":"MagThree"},
-        "container":{"volume":"MagThree", "d":"DThree"},
-        "outlet":{"outflow":"MagThree", "d":"DThree"}
+    "entities": {
+        "inflow": { "mag_value": "2", "mag_q_space": "3", "d_value": "1" },
+        "container": { "mag_value": "0", "mag_q_space": "3", "d_value": "0" },
+        "outflow": { "mag_value": "0", "mag_q_space": "3", "d_value": "0" }
     },
-    "relations":{
-        "1":{
-            "ty":"I+",
-            "args":"None",
-            "from":"inlet",
-            "to":"container"
+    "relations": {
+        "1": {
+            "ty": "I+",
+            "args": "None",
+            "from": "inflow",
+            "to": "container"
         },
-        "2":{
-            "ty":"I-",
-            "args":"None",
-            "from":"inlet",
-            "to":"container"
+        "2": {
+            "ty": "I-",
+            "args": "None",
+            "from": "inflow",
+            "to": "container"
         },
-        "3":{
-            "ty":"I+",
-            "args":"None",
-            "from":"inlet",
-            "to":"container"
+        "3": {
+            "ty": "I+",
+            "args": "None",
+            "from": "inflow",
+            "to": "container"
         },
-        "4":{
-            "ty":"I+",
-            "args":"None",
-            "from":"inlet",
-            "to":"container"
+        "4": {
+            "ty": "I+",
+            "args": "None",
+            "from": "inflow",
+            "to": "container"
         }
     }
 }

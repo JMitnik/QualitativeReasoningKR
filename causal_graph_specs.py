@@ -1,8 +1,10 @@
+from derivative import *
 from magnitude import *
+from q_spaces import *
 
 specs = {
     'entities':{
-        'inlet': {'inflow': MagTwo, 'd': MagThree},
+        'inflow': {'mag': Ma, 'd': MagThree},
         'container':{'volume': MagThree, 'd': DThree},
         'outlet':{'outflow': MagThree, 'd': DThree}
     },
