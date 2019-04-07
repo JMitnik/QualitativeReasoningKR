@@ -12,24 +12,11 @@ class CausalGraph(object):
         entities_specs = specs['entities']
         relations_specs = specs['relations']
         init_vals = specs['init_state']
-<<<<<<< HEAD
         
-=======
-        # fill up the entities list, set the init state
-        for entity_name in entities_specs:
-            entity_spec = entities_specs[entity_name]
-            init_val = init_vals[entity_name]
-            q_n, d_n = tuple(init_val)
-            quant = Quantity(q_n, entity_spec[q_n], init_val[q_n])
-            deriv = Derivative(d_n, entity_spec[d_n], init_val[d_n])
-            self.entities.append(Entity(entity_name, quant, deriv))
-        # fill up the relations
->>>>>>> example for pyviz
         for rel_spec in relations_specs:
             print(rel_spec)
             rel = Relation(rel_spec['ty'], [rel_spec['from'], rel_spec['to']], rel_spec['args'])
             self.relations.append(rel)
-<<<<<<< HEAD
         print(self.relations)
     
     def _load_entities(entities_specs):
@@ -45,11 +32,6 @@ class CausalGraph(object):
 
         return entities
 
-=======
-        # print(self.relations)
-    def propagate(self):
-        
->>>>>>> example for pyviz
 if __name__ == "__main__":
     from causal_graph_specs import specs
     CausalGraph(specs)
