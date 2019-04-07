@@ -1,15 +1,15 @@
-from enum import Enum
+from enum import Enum, IntEnum
 
-class MagThreeSpace(Enum):
+class MagThreeSpace(IntEnum):
     ZERO = 0
     PLUS = 1
     MAX = 2
 
-class MagTwoSpace(Enum):
+class MagTwoSpace(IntEnum):
     ZERO = 0
     MAX = 1
 
-class DerivativeSpace(Enum):
+class DerivativeSpace(IntEnum):
     NEG = -1
     ZERO = 0
     PLUS = 1

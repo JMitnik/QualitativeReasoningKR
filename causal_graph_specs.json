@@ -6,25 +6,25 @@
     ],
     "relations": [
         {
-            "ty": "I+",
+            "type": "I+",
             "args": "None",
             "from": "inflow",
             "to": "container"
         },
         {
-            "ty": "I-",
+            "type": "I-",
             "args": "None",
             "from": "inflow",
             "to": "container"
         },
         {
-            "ty": "I+",
+            "type": "I+",
             "args": "None",
             "from": "inflow",
             "to": "container"
         },
         {
-            "ty": "I+",
+            "type": "I+",
             "args": "None",
             "from": "inflow",
             "to": "container"

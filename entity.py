@@ -16,7 +16,7 @@ class Entity:
     def create_from_tuple(name, tup):
         tmp = Entity(name, None)
         tmp.from_tuple(tup)
-        return 
+        return tmp
     
     def from_tuple(self, tup):
         # TODO: Convert tuple to hashable object
@@ -34,9 +34,4 @@ class Entity:
         pass
 
 if __name__ == "__main__":
-    # test_set = set()
-    # test_set.add([3, 4, 5])
-    # test_set.add([3, 4, 5, 6])
-    # test_set.add([3, 4, 5])
-    # print(test_set)
     pass

@@ -5,7 +5,7 @@ RelationTypes = Enum('RelationTypes', 'I+ I- P+ P- CV')
 
 @dataclass
 class Relation:
-    ty: RelationTypes
+    rel_type: RelationTypes
     fr:''
     to:''
     args:str=''
