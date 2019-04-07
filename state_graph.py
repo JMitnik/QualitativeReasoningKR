@@ -5,3 +5,4 @@ from causal_graph import CausalGraph
 class StateGraph:
     causal_graph: CausalGraph
     root: Node = None
+    visitedStates: set = set([])
