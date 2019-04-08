@@ -9,10 +9,13 @@ class StateGraph:
     visitedStates: set = field(default_factory=set)
 
     def build_graph(self):
-        '''Builds a graph from the start
+        '''Starts the graph building process.
         '''
 
-        # First we extract our initial state from the causal_graph
-        test_state = self.causal_graph.state
-        test_state
+        # We extract our current state from the causal_graph, and ensure we add it
+        current_state = self.causal_graph.state
+        self.visitedStates.add(current_state)
+        self.root = Node(current_state)
 
+        # We propagate and discover new states
+        possible_states = self.causal_graph.discover_states(current_state)

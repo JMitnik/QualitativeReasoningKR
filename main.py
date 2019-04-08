@@ -18,7 +18,7 @@ def main():
     causal_graph = CausalGraph(init_entities, init_relations)
 
     # Initialize the state graph and connect the causal graph.
-    state_graph = StateGraph(init_causal_graph)
+    state_graph = StateGraph(causal_graph)
 
     # Build the state graph
     state_graph.build_graph()

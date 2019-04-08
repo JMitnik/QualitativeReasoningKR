@@ -32,7 +32,7 @@ class CausalGraph:
         for ent in entities_state:
             s.append(ent.to_tuple())
 
-        return set(s)
+        return tuple(s)
 
     @property
     def state(self):
@@ -43,16 +43,30 @@ class CausalGraph:
         # self.entities.
 
         # Go over each entity, and set their value
-        pass
+        for index, entity in enumerate(state):
+            self.entities[index].load_from_tuple(entity)
+
+    def discover_states(self, state: tuple):
+        '''Discover new states from the given state
+        '''
+        discovered_states = []
+        self._load_state(state)
+        
+        # Based on the current state, we check the derivatives of each entity.
+        # We want to generate all possible effects of our entities, and then
+        # make a cross product of all of their effects.
+        entity_effects = []
+        for entity in self.entities:
+            # Generate all possible effects
+            entity_effects.append(entity.generate_effects())
+
 
     def propagate(self, state: tuple):
-        # We take in some 'state'
-        self._load_state(state)
-
         all_possible_states = []
         new_entities = lambda : deepcopy(self.entities)
         # 1. check the ambiguity of exogenous variable
-        # TODO: Make this a consistent Enum
+
+        # TODO Make this a consistent Enum
 
         exo_var_n = 'inlet'
         exo_var = self.entities[exo_var_n]

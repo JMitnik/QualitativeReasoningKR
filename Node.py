@@ -1,6 +1,7 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 @dataclass
 class Node:
-    children: []
+    state: tuple
     parents = None
+    children: [] = field(default_factory=list)
