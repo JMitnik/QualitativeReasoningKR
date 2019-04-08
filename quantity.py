@@ -77,7 +77,17 @@ class Quantity:
                 # because our inflow's PLUS is already its max.
         return self.mag.val != self.mag.q_space.PLUS
 
+<<<<<<< HEAD
     def plausible_der(self):
         # all the possible derivative in such quantity
         if mag==mag.q_space:
             pass
+=======
+
+
+
+if __name__ == "__main__":
+    q = Quantity("Test", Magnitude(MagThreeSpace, 2), MagThreeSpace.ZERO)
+    print(q.plausible_der())
+
+>>>>>>> merge
