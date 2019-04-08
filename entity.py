@@ -1,37 +1,24 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
-# from collections import namedtuple
+from entity_tuple import EntityTuple
 import utils
 from derivative import Derivative, DerivativeSpace
 from magnitude import Magnitude
 from quantity import Quantity
-
 
 @dataclass
 class Entity:
     name: str
     quantity: Quantity
 
-    @staticmethod
-    def create_from_tuple(name, tup):
-        tmp = Entity(name, None)
-        tmp.from_tuple(tup)
-        return tmp
-    
-    def from_tuple(self, tup):
-        # TODO: Convert tuple to hashable object
-        dict_spec = utils.tuple2dict(tup)
-        print(dict_spec)
-        d = Derivative(DerivativeSpace, DerivativeSpace(dict_spec['d_value']))
-        mag_space = mag_q_space[dict_spec['mag_q_space']]
-        mag = Magnitude(mag_space, mag_space(dict_spec['mag_value']))
-        # Todo: for completeness, maybe we should just set the spec to have a list of quantities within an entity (even-though we only have one quantity per entity)
-        self.quantity = Quantity(dict_spec['title'], mag, d)
-        # entities.append(Entity(tup['title'], self.quantity))
+    def load_from_tuple(name, entity_tuple: EntityTuple):
+        '''Given an entity_tuple state, set the values of the entity's quantity
+        '''
+        
+        self.quantity.set_from_tuple(entity_tuple)
     
     def to_tuple(self):
-        # TODO: Convert to tuple
-        pass
+        return self.quantity.to_tuple()
 
 if __name__ == "__main__":
     pass

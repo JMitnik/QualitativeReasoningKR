@@ -6,6 +6,7 @@ from q_spaces import DerivativeSpace
 class Derivative:
     space: EnumMeta = DerivativeSpace
     val: Enum = DerivativeSpace.ZERO
+    
     def set_to(self, num):
         enum_map = {0: DerivativeSpace.ZERO,
                     1: DerivativeSpace.PLUS, -1: DerivativeSpace.NEG}

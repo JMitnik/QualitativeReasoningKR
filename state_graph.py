@@ -12,7 +12,7 @@ class StateGraph:
         '''Builds a graph from the start
         '''
 
-        # First we extract our initial state from the causal_graph, put that in visitedStates
+        # First we extract our initial state from the causal_graph
         test_state = self.causal_graph.state
         test_state
 

@@ -1,3 +1,4 @@
+from entity_tuple import EntityTuple
 from entity import Entity
 from quantity import Quantity
 from relation import Relation
@@ -5,45 +6,30 @@ from q_spaces import DerivativeSpace, mag_q_space
 from derivative import Derivative
 from magnitude import Magnitude
 
-class CausalGraph(object):
-    def __init__(self, specs):
-        self.specs=specs
-        self.entities={}
-        self.relations=[]
-        self.incoming_relation_map = {}
-
-        self.entities = self._load_entities(specs['entities'])
-        self.relations = self._lad_relations(specs['relations'])
-    
-    def _load_entities(self, entities_specs):
-        for entity in entities_specs:
-            if self.entities.get(entity['title']) == None:
-                self.entities[entity['title']] = Entity.create_from_tuple(entity['title'], entity)
-            else:
-                self.entities[entity].load_tuple(entity)
-
-        return entities
-
-    def _load_relations(self, relations_specs):        
-        for rel_spec in relations_specs:
-            rel = Relation(rel_spec['type'], [rel_spec['from'], rel_spec['to']], rel_spec['args'])
-            self.relations.append(rel)
-
-        for rel in self.relations:
-            self.incoming_relation_map[rel.to] = rel
+class CausalGraph:
+    def __init__(self, entities: list, relations: list):
+        '''Initialize a causal-graph.
+        
+        Arguments:
+            entities
+            relations {[type]} -- [description]
+        '''
+        self.entities = entities
+        self.relations = relations
+        self.incoming_relation_map = {rel.to: rel for rel in relations }
 
     def _to_states(self, states):
         result = []
 
-        for state in states:
-            result.append(self._to_state(state))
+        for entities_state in states:
+            result.append(self._to_state(entities_state))
 
         return tuple(result)
 
-    def _to_state(self, entities):
+    def _to_state(self, entities_state):
         s = []
 
-        for ent in entities:
+        for ent in entities_state:
             s.append(ent.to_tuple())
 
         return set(s)
@@ -52,22 +38,29 @@ class CausalGraph(object):
     def state(self):
         return self._to_state(self.entities)
 
-    def propagate(self, entities_specs):
-        self._load_entities(entities_specs)
-        
+    def _load_state(self, state):
+        # The index of each namedtuple in the state corresponds to the entity in
+        # self.entities.
+
+        # Go over each entity, and set their value
+        pass
+
+    def propagate(self, state: tuple):
+        # We take in some 'state'
+        self._load_state(state)
+
         all_possible_states = []
         new_entities = lambda : deepcopy(self.entities)
         # 1. check the ambiguity of exogenous variable
         # TODO: Make this a consistent Enum
+
         exo_var_n = 'inlet'
         exo_var = self.entities[exo_var_n]
-        # if exo_var.quantity.derivative==0:
-
         # TODO: Make valid_der method
         for valid_der in exo_var.quantity.valid_der():
             new_s = new_entities()
             new_exo_var = new_s[exo_var_n]
-            
+
             # TODO: Make set_der method
             new_exo_var.set_der(valid_der)
             all_possible_states.append(new_s)
