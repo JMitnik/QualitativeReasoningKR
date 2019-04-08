@@ -70,10 +70,10 @@ class Quantity:
         # and that these are the extremes.
         return self.mag.val == self.mag.q_space.ZERO or self.mag.val == self.mag.q_space.MAX 
 
-    def plausible_der(self):
-        # all the possible derivative in such quantity
-        if mag==mag.q_space:
-            pass
+
+
 
 if __name__ == "__main__":
-    print(q)
+    q = Quantity("Test", Magnitude(MagThreeSpace, 2), MagThreeSpace.ZERO)
+    print(q.plausible_der())
+
