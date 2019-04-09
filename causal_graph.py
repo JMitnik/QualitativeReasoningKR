@@ -62,6 +62,13 @@ class CausalGraph:
             # Generate all possible effects
             entity_effects.append(entity.generate_effects())
 
+    def trace_template_intra_states(states):
+        result_entities_text = []
+
+        for state in states:
+            # We can have terminal states in our trace for our state.
+            # Add in entities.
+            entity_template = 'In this state, our {} has reached value {}.'.format
 
     def propagate(self, state: tuple):
         all_possible_states = []

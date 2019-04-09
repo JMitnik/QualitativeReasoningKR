@@ -19,4 +19,7 @@ class StateGraph:
 
         # We propagate and discover new states
         # possible_states = self.causal_graph.discover_states(current_state)
-        possible_states = self.causal_graph.propagate(current_state)
+
+        # List of tuples
+        possible_states = self.causal_graph.propagate(current_state) # 
+        
