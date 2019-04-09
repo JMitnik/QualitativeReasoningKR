@@ -192,7 +192,6 @@ class CausalGraph:
             1b. Apply derivatives, ensure that we have both landmark and interval derivatvie results.
             2. Union this set of states;.
             3. Ensure that each are consistent to the relation (except for the actual ambiguity: thus, change values / prune values which are not consistent.)
-
         '''
 
         # TODO: Generate states from possible ambiguities

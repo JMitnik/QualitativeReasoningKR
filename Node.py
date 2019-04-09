@@ -3,5 +3,10 @@ from dataclasses import dataclass, field
 @dataclass
 class Node:
     state: tuple
-    parents = None
-    children: [] = field(default_factory=list)
+    note: str
+
+@dataclass
+class Edge:
+    from: Node = None
+    to: Node = None
+    note: str
