@@ -18,4 +18,5 @@ class StateGraph:
         self.root = Node(current_state)
 
         # We propagate and discover new states
-        possible_states = self.causal_graph.discover_states(current_state)
+        # possible_states = self.causal_graph.discover_states(current_state)
+        possible_states = self.causal_graph.propagate(current_state)

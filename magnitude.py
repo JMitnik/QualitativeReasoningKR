@@ -4,4 +4,4 @@ from enum import Enum, EnumMeta
 @dataclass
 class Magnitude:
     q_space: EnumMeta
-    val: Enum
+    val: Enum=0

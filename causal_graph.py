@@ -5,8 +5,12 @@ from relation import Relation
 from q_spaces import DerivativeSpace, mag_q_space
 from derivative import Derivative
 from magnitude import Magnitude
+<<<<<<< HEAD
 from itertools import product
 
+=======
+from copy import deepcopy
+>>>>>>> finish entity&quantity, small bug fix
 
 class CausalGraph:
     def __init__(self, entities: list, relations: list):
@@ -18,7 +22,12 @@ class CausalGraph:
         '''
         self.entities = entities
         self.relations = relations
+<<<<<<< HEAD
         self.incoming_relation_map = {rel.to: rel for rel in relations}
+=======
+        self.entities_map = {ent.name:ent for ent in entities}
+        self.incoming_relation_map = {rel.to: rel for rel in relations }
+>>>>>>> finish entity&quantity, small bug fix
 
     def _to_states(self, states):
         result = []
@@ -106,27 +115,31 @@ class CausalGraph:
 
     def propagate(self, state: tuple):
         all_possible_states = []
+<<<<<<< HEAD
         def new_entities(): return deepcopy(self.entities)
+=======
+        new_entities = lambda : deepcopy(self.entities_map)
+>>>>>>> finish entity&quantity, small bug fix
         # 1. check the ambiguity of exogenous variable
 
         # TODO Make this a consistent Enum
 
-        exo_var_n = 'inlet'
-        exo_var = self.entities[exo_var_n]
-        # TODO: Make valid_der method
-        for valid_der in exo_var.quantity.valid_der():
+        exo_var_n = 'inflow'
+        exo_var = self.entities_map[exo_var_n]
+        # TODO: Make valid_derivatives method
+        for valid_der in exo_var.quantity.valid_derivatives():
             new_s = new_entities()
             new_exo_var = new_s[exo_var_n]
 
-            # TODO: Make set_der method
-            new_exo_var.set_der(valid_der)
+            # TODO: Make set_derivative method
+            new_exo_var.quantity.set_derivative(valid_der)
             all_possible_states.append(new_s)
 
         # 2. check the ambiguity of derivative applying
         state_li_after_applying = []
 
-        for entity_n in self.entities:
-            entity = self.entities[entity_n]
+        for entity_n in self.entities_map:
+            entity = self.entities_map[entity_n]
             ent_li = entity.apply_der()
             state_li_after_applying.append(ent_li)
             # if entity.derivative!=0:
@@ -166,7 +179,11 @@ class CausalGraph:
                     break
 
             # If q and d influence have conflicts, generate new states and append
+<<<<<<< HEAD
 
 
+=======
+        return self._to_states(new_entities)
+>>>>>>> finish entity&quantity, small bug fix
 if __name__ == "__main__":
     pass

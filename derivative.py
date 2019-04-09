@@ -10,6 +10,6 @@ class Derivative:
     def set_to(self, num):
         enum_map = {0: DerivativeSpace.ZERO,
                     1: DerivativeSpace.PLUS, -1: DerivativeSpace.NEG}
-        val = enum_map[num]
+        self.val = enum_map[num]
 if __name__ == "__main__":
     Derivative().set_to(1)
