@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from copy import deepcopy
 
 from entity_tuple import EntityTuple
 import utils
@@ -26,14 +27,13 @@ class Entity:
 
     @staticmethod
     def create_from_tuple(name, tup):
-        tmp = Entity(name, None)
-        tmp.load_from_tuple(tup)
+        tmp = Entity(name, Quantity.create_from_tuple(tup))
         return tmp
     
     def __repr__(self):
-        res = '{}:{} {}'
+        res = r'{}:{} {}'
         if self.quantity is not None:
-            res = res.format(self.name, self.quantity.mag, self.quantity.der)
+            res = res.format(self.name, self.quantity.mag.val, self.quantity.der.val)
             return res
         else:
             return self.name
@@ -41,18 +41,23 @@ class Entity:
         return self.__repr__()
 
     def set_der(self, der_val):
-        self.quantity.set_der(der_val)
+        self.quantity.set_derivative(der_val)
 
     def apply_der(self):
         res_li = []
-        for der in self.quantity.plausible_der:
-            tmp_ent = deepcopy(self)
-            tmp_ent.quantity.apply_der(der)
-            res_li.append(tmp_ent)
-            
+        for der in self.quantity.valid_derivatives():
+            # tmp_ent = deepcopy(self)
+            # print(self.quantity.valid_derivatives())
+            qs = self.quantity.generate_effects(der)
+            for q in qs:
+                res_li.append(Entity(self.name, q))
+            # res_li.append(tmp_ent)
+        return res_li
 
 if __name__ == "__main__":
-    dict_ = {'d_value':1, 'mag_q_space':'2', 'mag_value':1, 'title':'jona'}
-    s = Entity.create_from_tuple('jona', dict_)
+    dict_ = {'der':1, 'mag_q_space':'2', 'mag':1, 'title':'jona'}
+    tup = EntityTuple(**dict_)
+    s = Entity.create_from_tuple('jona', tup)
     print(s.to_tuple())
-    s.set_der(1)
+    s.set_der(-1)
+    print(s.apply_der())
