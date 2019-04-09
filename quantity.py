@@ -22,6 +22,7 @@ class Quantity:
     def generate_effects(self, derivative=None):
         if not derivative:
             derivative = self.der
+
         # Checks:
         #  1. Ensure that if we are at landmark, we would generate at most one
         #       state.
@@ -37,13 +38,16 @@ class Quantity:
         
         nr_effects = 2
 
-        if self.is_at_landmark():
-            nr_effects = 1
+        # WARNING: Is this really relevant? Consider that the effect generated is
+        # the same state basically, should it really matter?
+
+        # if self.is_at_landmark():
+        #     nr_effects = 1
 
         if derivative not in self.valid_derivatives():
-            derivative = self.der.space(0)
+            return EntityTuple(self.mag.val, self.der.space.ZERO)
         
-        
+        return EntityTuple(self.mag.q_space(self.mag.val + derivative), derivative)
 
     def valid_derivatives(self):
         valid_derivatives = []

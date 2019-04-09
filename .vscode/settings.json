@@ -1,5 +1,14 @@
 {
     "python.pythonPath": "/Users/jonathanmitnik/anaconda3/envs/ai/bin/python",
     "python.linting.pylintEnabled": true,
-    "python.formatting.provider": "autopep8"
+    "python.formatting.provider": "autopep8",
+    "workbench.colorCustomizations": {
+        "titleBar.activeBackground": "#42b883",
+        "titleBar.inactiveBackground": "#42b88399",
+        "titleBar.activeForeground": "#000000",
+        "titleBar.inactiveForeground": "#00000099",
+        "statusBar.background": "#42b883",
+        "statusBarItem.hoverBackground": "#359268",
+        "statusBar.foreground": "#000000"
+    }
 }
