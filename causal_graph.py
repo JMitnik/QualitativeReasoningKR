@@ -186,6 +186,12 @@ class CausalGraph:
             We noticed an inconsistency, and thus, we split this substate into two child substates, each with a different result. Now, we need to examine both split
             states and see if there are other inconsistencies in the direct instantaneous relations! 
 
+            SO IN THE END:
+
+            1a. Apply relations in current state: of each of the individual ambigiuties, apply new subchild.
+            1b. Apply derivatives, ensure that we have both landmark and interval derivatvie results.
+            2. Union this set of states;.
+            3. Ensure that each are consistent to the relation (except for the actual ambiguity: thus, change values / prune values which are not consistent.)
 
         '''
 
