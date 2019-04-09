@@ -74,9 +74,13 @@ class CausalGraph:
         # For each entity, apply the current derivative in its current state.
         
         # If we are on landmark, return two states.
-        result = []
+        entity_effects = []
+        for entity in entities:
+            # Generate all possible effects
+            entity_effects = entity.generate_effects()
+            entity_effects.append(entity_effects)
 
-        return result
+        return entity_effects
 
     def discover_states(self, state: tuple):
         '''Discover new states from the given state
@@ -87,16 +91,12 @@ class CausalGraph:
         # For all entities:
         # 1. Apply all relations.
         # 2. Apply all derivatives.
+        self._apply_derivative_to_entities(self.entities)
 
         # 3. Apply a union.
         # MAYBE SWAP
         # 4. Ensure all are consistent.
 
-        entity_effects = []
-        for entity in self.entities:
-            # Generate all possible effects
-            entity_effects = entity.generate_effects()
-            entity_effects.append(entity.generate_effects())
 
     def propagate(self, state: tuple):
         all_possible_states = []

@@ -18,7 +18,7 @@ class Entity:
         self.quantity.set_from_tuple(entity_tuple)
 
     def generate_effects(self):
-        self.quantity.generate_effects()
+        return self.quantity.generate_effects()
     
     def to_tuple(self):
         return self.quantity.to_tuple()
