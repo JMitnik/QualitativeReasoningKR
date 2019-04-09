@@ -37,7 +37,7 @@ def bootstrap_entities(entities_specs):
 
     for entity in entities_specs:
         entity_q_magnitude = Magnitude(mag_q_space[entity['mag_q_space']], mag_q_space[entity['mag_q_space']](int(entity['mag_value'])))
-        entity_q_derivative = Derivative()
+        entity_q_derivative = Derivative(Derivative.space, Derivative.space(int(entity['d_value'])))
         entity_quantity = Quantity(entity['title'], entity_q_magnitude, entity_q_derivative)
         entities.append(Entity(entity['title'], entity_quantity))
 

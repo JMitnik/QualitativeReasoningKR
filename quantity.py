@@ -36,18 +36,19 @@ class Quantity:
         # 3. If we are here, then that means we will generate two states with
         #    the current derivative
         
-        nr_effects = 2
 
-        # WARNING: Is this really relevant? Consider that the effect generated is
-        # the same state basically, should it really matter?
+        valid_derivatives = self.valid_derivatives()
 
-        # if self.is_at_landmark():
-        #     nr_effects = 1
+        # If our derivative actually can't work, we set our derivative to be zero
+        if derivative.val not in valid_derivatives:
+            return [EntityTuple(self.mag.val, self.der.space.ZERO)]
 
-        if derivative not in self.valid_derivatives():
-            return EntityTuple(self.mag.val, self.der.space.ZERO)
-        
-        return EntityTuple(self.mag.q_space(self.mag.val + derivative), derivative)
+        # If we are at landmark, perform the derivative as the only possible state
+        if self.is_at_landmark():
+            return [EntityTuple(self.mag.q_space(self.mag.val + derivative.val), derivative.val)]
+
+        # We are in interval, return either the current action or execute the next action.
+        return [EntityTuple(self.mag.q_space(self.mag.val + derivative.val), derivative.val), self.to_tuple()]
 
     def valid_derivatives(self):
         valid_derivatives = []
@@ -70,14 +71,13 @@ class Quantity:
         # We are at landmark if we are at ZERO or MAX, basically. We can
         # hard-code that, more or less.
 
-        # WARNING: This assumes that all Magnitude Q Spaces have zero and Max,
-        # and that these are the extremes.
-        return self.mag.val == self.mag.q_space.ZERO or self.mag.val == self.mag.q_space.MAX 
+        # WARNING: This assumes that all Magnitude Q Spaces have PLUS.
+
+        # TODO: Get a better way of finding out if we didn't reach the max/min,
+                # because our inflow's PLUS is already its max.
+        return self.mag.val != self.mag.q_space.PLUS
 
     def plausible_der(self):
         # all the possible derivative in such quantity
         if mag==mag.q_space:
             pass
-
-if __name__ == "__main__":
-    print(q)

@@ -5,6 +5,7 @@ from relation import Relation
 from q_spaces import DerivativeSpace, mag_q_space
 from derivative import Derivative
 from magnitude import Magnitude
+from itertools import product
 
 class CausalGraph:
     def __init__(self, entities: list, relations: list):
@@ -75,10 +76,15 @@ class CausalGraph:
         
         # If we are on landmark, return two states.
         entity_effects = []
+
+        # PIN: I need to make a product of these results. Somehow combine them.s
+        # TODO: Ensure we only execute the non-exo variables
         for entity in entities:
             # Generate all possible effects
-            entity_effects = entity.generate_effects()
-            entity_effects.append(entity_effects)
+            entity_effects.append(entity.generate_effects())
+
+        test_product = list(product(entity_effects))
+        test_product
 
         return entity_effects
 
