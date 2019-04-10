@@ -65,9 +65,16 @@ class CausalGraph:
                 continue
 
             relation_states = entity.apply_relations(incoming_relations, entities)
-            result.append(relation_states)
 
-        return result
+            if not relation_states:
+                result.append([EntityTuple(entity.quantity.mag.val, entity.quantity.der.val)])
+            else:
+                result.append(relation_states)
+
+        # PIN: States aren't printed as we want yet.
+        states = set(product(*result))
+
+        return states
 
     def _apply_derivative_to_entities(self, entities):
         # For each entity, apply the current derivative in its current state.
@@ -86,18 +93,19 @@ class CausalGraph:
         '''Discover new states from the given state
         '''
         self._load_state(state)
-        generated_states = []
-
-        # For all entities:
-        # 1. Apply all derivatives.
         deriv_states_set = self._apply_derivative_to_entities(self.entities)
         relation_states_set = self._apply_relations_to_entities(self.entities)
 
-        # 2. Apply all relations.
-
-        # 3. Apply a union.
-        # MAYBE SWAP
+        states = deriv_states_set | relation_states_set
+        
         # 4. Ensure all are consistent.
+
+    def fix_consistent_states(self, states):
+        # We need to check a number of things:
+        # Check that simple proportional relations are met. (If one is 0 while another is +, fix it! I guess only for 0)
+        # Check that VC's are met!
+        pass
+            
 
     def propagate(self, state: tuple):
         all_possible_states = []

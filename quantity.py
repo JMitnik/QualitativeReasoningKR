@@ -78,73 +78,66 @@ class Quantity:
         end_states = []
 
         for relation in relations:
-            relation_effects = []
+            relation_states = []
             related_entity = [entity for entity in entities if entity.name == relation.fr][0]
             relation_type = relation.rel_type
 
+            # If the relation type is P proportional and the derivative is actual not zero of our related entity.
             if relation_type == "P+" and related_entity.quantity.der.val != related_entity.quantity.der.space.ZERO:
-                # If not growing, take over value from related entity
-                if self.der.val == Derivative.space.ZERO:
-                    relation_effects.append(EntityTuple(self.mag.val, related_entity.quantity.der.val))
-
-                # If they are equal, no ambiguity, as if the derivative is just applying
-                if self.der.val == related_entity.quantity.der.val:
+                
+                # If not growing, or if they are equal, then the derivative of the related entity is just taken
+                if self.der.val == Derivative.space.ZERO or self.der.val == related_entity.quantity.der.val:
+                    end_states.append(EntityTuple(self.mag.val, related_entity.quantity.der.val))
                     continue
 
-                # If we are here, we have the ambiguity of multiple possible
-                # values. Either we generate the current value, or the ambiguity wins.
-                relation_effects.append(EntityTuple(self.mag.val, related_entity.quantity.der.val))
-                relation_effects.append(EntityTuple(self.mag.val, Derivative.space(related_entity.quantity.der.val + self.der.val)))
+                # If we arrive at this state, then that means we will have an ambiguity! Generate the current state,
+                # and the state in case the related entity will win!
+                end_states.append(EntityTuple(self.mag.val, related_entity.quantity.der.val))
+                end_states.append(EntityTuple(self.mag.val, Derivative.space(related_entity.quantity.der.val + self.der.val)))
             
             if relation_type == "P-" and related_entity.quantity.der.val != related_entity.quantity.der.space.ZERO:
-
-                if self.der.val == Derivative.space.ZERO:
-                    relation_effects.append(EntityTuple(self.mag.val, related_entity.quantity.der.val))
-
-                if self.der.val == related_entity.quantity.der.val:
+                # If not growing or if they are equal, take the derivative.
+                if self.der.val == Derivative.space.ZERO or self.der.val == related_entity.quantity.der.val:
+                    end_states.append(EntityTuple(self.mag.val, related_entity.quantity.der.val))
                     continue
 
-                # If we are here, we have the ambiguity of multiple possible
-                # values. Either we generate the current value, or the ambiguity wins.
-                relation_effects.append(EntityTuple(self.mag.val, related_entity.quantity.der.val))
-                relation_effects.append(EntityTuple(self.mag.val, Derivative.space(related_entity.quantity.der.val - self.der.val)))
+                # If we arrive at this state, then that means we will have an ambiguity! Generate the current state,
+                # and the state in case the related entity will win!
+                end_states.append(EntityTuple(self.mag.val, related_entity.quantity.der.val))
+                end_states.append(EntityTuple(self.mag.val, Derivative.space(related_entity.quantity.der.val - self.der.val)))
             
             if relation_type == "I+" and related_entity.quantity.mag.val != related_entity.quantity.mag.q_space.ZERO:
+                # If not growing, then a positive influence of a present entity will cause this to grow.
                 if self.der.val == Derivative.space.ZERO:
-                    relation_effects.append(EntityTuple(self.mag.val, Derivative.space.PLUS))
+                    end_states.append(EntityTuple(self.mag.val, Derivative.space.PLUS))
+                    continue
 
-                # If we are dealing with a positive derivative
+                # If we are dealing with a positive derivative, then the positive influence will just keep the growth alive.
                 # WARNING: We assume magnitude never reaches negative here
                 if self.der.val == Derivative.space.PLUS:
+                    end_states.append(EntityTuple(self.mag.val, self.der.val))
                     continue
                 
-                # We are thus at negative
-                relation_effects.append(EntityTuple(self.mag.val, related_entity.quantity.der.val))
-                relation_effects.append(EntityTuple(self.mag.val, Derivative.space.ZERO))
+                # We are thus at the ambiguity (negative). Let's add in case the influence doesn't win (current derivative),
+                # our ambiguity and the increase might be zero. 
+                end_states.append(EntityTuple(self.mag.val, self.der.val))
+                end_states.append(EntityTuple(self.mag.val, Derivative.space.ZERO))
 
             if relation_type == "I-" and related_entity.quantity.mag.val != related_entity.quantity.mag.q_space.ZERO:
+                
                 if self.der.val == Derivative.space.ZERO:
-                    relation_effects.append(EntityTuple(self.mag.val, Derivative.NEG))
+                    end_states.append(EntityTuple(self.mag.val, Derivative.space.NEG))
+                    continue
 
                 # If we are dealing with a positive derivative
                 # WARNING: We assume magnitude never reaches negative here
                 if self.der.val == Derivative.space.NEG:
+                    end_states.append(EntityTuple(self.mag.val, self.der.val))
                     continue
                 
                 # We are thus at positive
-                relation_effects.append(EntityTuple(self.mag.val, related_entity.quantity.der.val))
-                relation_effects.append(EntityTuple(self.mag.val, Derivative.space.ZERO))
-
-            end_states.append(relation_effects)
-        # We have a conflict if:
-        # 1. Two relations fight over one entity. Three possible resulting states for this entity:
-        # a) Either the first loses. 
-        # b) Either the second loses
-        # c) They are equally strong.
-        # 2. A relation fights with the flow of the entity itself.
-
-        # Possible idea: let the entity deal with the incoming relations,
-        # and return the possible values it can assume.
+                end_states.append(EntityTuple(self.mag.val, self.der.val))
+                end_states.append(EntityTuple(self.mag.val, Derivative.space.ZERO))
 
         return end_states
 
