@@ -7,17 +7,18 @@ from derivative import Derivative
 from magnitude import Magnitude
 from itertools import product
 
+
 class CausalGraph:
     def __init__(self, entities: list, relations: list):
         '''Initialize a causal-graph.
-        
+
         Arguments:
             entities
             relations {[type]} -- [description]
         '''
         self.entities = entities
         self.relations = relations
-        self.incoming_relation_map = {rel.to: rel for rel in relations }
+        self.incoming_relation_map = {rel.to: rel for rel in relations}
 
     def _to_states(self, states):
         result = []
@@ -25,7 +26,7 @@ class CausalGraph:
         for entities_state in states:
             result.append(self._to_state(entities_state))
 
-        return set(result) # Unique values only
+        return set(result)  # Unique values only
 
     def _to_state(self, entities_state):
         s = []
@@ -55,11 +56,11 @@ class CausalGraph:
             incoming_relations = self.incoming_relation_map[entity]
 
             # We have a conflict if:
-                # 1. Two relations fight over one entity. Three possible resulting states for this entity:
-                    # a) Either the first loses
-                    # b) Either the second loses
-                    # c) They are equally strong.
-                # 2. A relation fights with the flow of the entity itself.
+            # 1. Two relations fight over one entity. Three possible resulting states for this entity:
+            # a) Either the first loses
+            # b) Either the second loses
+            # c) They are equally strong.
+            # 2. A relation fights with the flow of the entity itself.
 
             # Possible idea: let the entity deal with the incoming relations,
             # and return the possible values it can assume.
@@ -73,7 +74,7 @@ class CausalGraph:
 
     def _apply_derivative_to_entities(self, entities):
         # For each entity, apply the current derivative in its current state.
-        
+
         # If we are on landmark, return two states.
         entity_effects = []
 
@@ -103,10 +104,9 @@ class CausalGraph:
         # MAYBE SWAP
         # 4. Ensure all are consistent.
 
-
     def propagate(self, state: tuple):
         all_possible_states = []
-        new_entities = lambda : deepcopy(self.entities)
+        def new_entities(): return deepcopy(self.entities)
         # 1. check the ambiguity of exogenous variable
 
         # TODO Make this a consistent Enum
@@ -133,14 +133,14 @@ class CausalGraph:
             #     if entity.quantity==0:
             #         new_s = new_entities()
             #         new_s[entity_n].apply_der()
-        new_entities+=list(product(state_li_after_applying))
+        new_entities += list(product(state_li_after_applying))
 
         # TODO: Create another loop which checks for exogenous states within possible ambigutiies (other than stable)
 
         # 3. check the ambiguity of relations
         for entity_n in self.relation_map:
             rels = self.relation_map[entity_n]
-            rels_n = {r.ty:r for r in rels}
+            rels_n = {r.ty: r for r in rels}
             q_influence = []
             d_influence = []
 
@@ -166,6 +166,7 @@ class CausalGraph:
                     break
 
             # If q and d influence have conflicts, generate new states and append
+
 
 if __name__ == "__main__":
     pass
