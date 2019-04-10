@@ -19,6 +19,9 @@ class Entity:
 
     def generate_effects(self):
         return self.quantity.generate_effects()
+
+    def apply_relations(self, relations, entities):
+        return self.quantity.apply_relations(relations, entities)
     
     def to_tuple(self):
         return self.quantity.to_tuple()

@@ -50,6 +50,105 @@ class Quantity:
         # We are in interval, return either the current action or execute the next action.
         return [EntityTuple(self.mag.q_space(self.mag.val + derivative.val), derivative.val), self.to_tuple()]
 
+    def apply_relations(self, relations, entities):
+
+        '''
+            1. So with our current entity, we want to start with relation A.
+
+                1. Relation A has an entity, Y.
+                2. We have two types of relations: I and P. We distinguish I and P
+
+                2a Case: I
+                    1. Then if Y has an I relation to X, but is not active, no ambiguity is added.
+                    2. If Y has a positive influence to X, and Y is active:
+                        1. Then if X is 0, we can instantly set the derivative of X to + => Effect is +
+                        2. If X is +, then the derivative of X is still +. (Amplification) => Effect is +
+                        3. If X is -, then we have an ambiguity. 
+                            => Generate multiple effects for next state: 
+                            * The resulting derivative for the next state is either +, or 0.
+                    3. If Y has a negative influence to X, and Y is active. 
+                        1. If X is 0, set derivative to negative
+                        2. If X is -, set derivative of X to be - (Amplification).
+                        3. If X is +, we have ambigutiy. => Generate multiple states, where either it remains + or become -
+                2b Case: P
+                    1. If Y has a P+ relation to X and it's derivative is active.
+                        1. If X's derivative is nonactive, then that means it will go up.
+                        2. If Y's derivative is active
+        '''
+        end_states = []
+
+        for relation in relations:
+            relation_effects = []
+            related_entity = [entity for entity in entities if entity.name == relation.fr][0]
+            relation_type = relation.rel_type
+
+            if relation_type == "P+" and related_entity.quantity.der.val != related_entity.quantity.der.space.ZERO:
+                # If not growing, take over value from related entity
+                if self.der.val == Derivative.space.ZERO:
+                    relation_effects.append(EntityTuple(self.mag.val, related_entity.quantity.der.val))
+
+                # If they are equal, no ambiguity, as if the derivative is just applying
+                if self.der.val == related_entity.quantity.der.val:
+                    continue
+
+                # If we are here, we have the ambiguity of multiple possible
+                # values. Either we generate the current value, or the ambiguity wins.
+                relation_effects.append(EntityTuple(self.mag.val, related_entity.quantity.der.val))
+                relation_effects.append(EntityTuple(self.mag.val, Derivative.space(related_entity.quantity.der.val + self.der.val)))
+            
+            if relation_type == "P-" and related_entity.quantity.der.val != related_entity.quantity.der.space.ZERO:
+
+                if self.der.val == Derivative.space.ZERO:
+                    relation_effects.append(EntityTuple(self.mag.val, related_entity.quantity.der.val))
+
+                if self.der.val == related_entity.quantity.der.val:
+                    continue
+
+                # If we are here, we have the ambiguity of multiple possible
+                # values. Either we generate the current value, or the ambiguity wins.
+                relation_effects.append(EntityTuple(self.mag.val, related_entity.quantity.der.val))
+                relation_effects.append(EntityTuple(self.mag.val, Derivative.space(related_entity.quantity.der.val - self.der.val)))
+            
+            if relation_type == "I+" and related_entity.quantity.mag.val != related_entity.quantity.mag.q_space.ZERO:
+                if self.der.val == Derivative.space.ZERO:
+                    relation_effects.append(EntityTuple(self.mag.val, Derivative.space.PLUS))
+
+                # If we are dealing with a positive derivative
+                # WARNING: We assume magnitude never reaches negative here
+                if self.der.val == Derivative.space.PLUS:
+                    continue
+                
+                # We are thus at negative
+                relation_effects.append(EntityTuple(self.mag.val, related_entity.quantity.der.val))
+                relation_effects.append(EntityTuple(self.mag.val, Derivative.space.ZERO))
+
+            if relation_type == "I-" and related_entity.quantity.mag.val != related_entity.quantity.mag.q_space.ZERO:
+                if self.der.val == Derivative.space.ZERO:
+                    relation_effects.append(EntityTuple(self.mag.val, Derivative.NEG))
+
+                # If we are dealing with a positive derivative
+                # WARNING: We assume magnitude never reaches negative here
+                if self.der.val == Derivative.space.NEG:
+                    continue
+                
+                # We are thus at positive
+                relation_effects.append(EntityTuple(self.mag.val, related_entity.quantity.der.val))
+                relation_effects.append(EntityTuple(self.mag.val, Derivative.space.ZERO))
+
+            end_states.append(relation_effects)
+        # We have a conflict if:
+        # 1. Two relations fight over one entity. Three possible resulting states for this entity:
+        # a) Either the first loses. 
+        # b) Either the second loses
+        # c) They are equally strong.
+        # 2. A relation fights with the flow of the entity itself.
+
+        # Possible idea: let the entity deal with the incoming relations,
+        # and return the possible values it can assume.
+
+        return end_states
+
+
     def valid_derivatives(self):
         valid_derivatives = []
 

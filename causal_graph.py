@@ -6,7 +6,7 @@ from q_spaces import DerivativeSpace, mag_q_space
 from derivative import Derivative
 from magnitude import Magnitude
 from itertools import product
-
+from collections import defaultdict
 
 class CausalGraph:
     def __init__(self, entities: list, relations: list):
@@ -18,7 +18,13 @@ class CausalGraph:
         '''
         self.entities = entities
         self.relations = relations
-        self.incoming_relation_map = {rel.to: rel for rel in relations}
+        # self.incoming_relation_map = {rel.to: rel for rel in relations}
+        self.incoming_relation_map = defaultdict(list)
+
+        for rel in relations:
+            self.incoming_relation_map[rel.to].append(rel)
+
+        self.incoming_relation_map
 
     def _to_states(self, states):
         result = []
@@ -49,33 +55,22 @@ class CausalGraph:
             self.entities[index].load_from_tuple(entity)
 
     def _apply_relations_to_entities(self, entities):
-        # 1. Go through all the entities, and check all to's.
         result = []
 
         for entity in entities:
-            incoming_relations = self.incoming_relation_map[entity]
+            try:
+                incoming_relations = self.incoming_relation_map[entity.name]
+            except:
+                # No incoming relations found, we don't have anything to apply.
+                continue
 
-            # We have a conflict if:
-            # 1. Two relations fight over one entity. Three possible resulting states for this entity:
-            # a) Either the first loses
-            # b) Either the second loses
-            # c) They are equally strong.
-            # 2. A relation fights with the flow of the entity itself.
-
-            # Possible idea: let the entity deal with the incoming relations,
-            # and return the possible values it can assume.
-
-            # With the possible values of the entities (list of varying entity
-            # values), we can generate a complete state based purely off of
-            # this. Grab all entities except for this one, and turn it into a state
-            # using _to_states(). Add that to result.
+            relation_states = entity.apply_relations(incoming_relations, entities)
+            result.append(relation_states)
 
         return result
 
     def _apply_derivative_to_entities(self, entities):
         # For each entity, apply the current derivative in its current state.
-
-        # If we are on landmark, return two states.
         entity_effects = []
 
         # TODO: Ensure we only execute the non-exo variables
@@ -83,9 +78,9 @@ class CausalGraph:
             # Generate all possible effects
             entity_effects.append(entity.generate_effects())
 
-        test_product = list(product(*entity_effects))
+        states = list(product(*entity_effects))
 
-        return entity_effects
+        return set(states)
 
     def discover_states(self, state: tuple):
         '''Discover new states from the given state
@@ -95,10 +90,10 @@ class CausalGraph:
 
         # For all entities:
         # 1. Apply all derivatives.
-        self._apply_derivative_to_entities(self.entities)
+        deriv_states_set = self._apply_derivative_to_entities(self.entities)
+        relation_states_set = self._apply_relations_to_entities(self.entities)
 
         # 2. Apply all relations.
-        # PIN: We want to apply the relations
 
         # 3. Apply a union.
         # MAYBE SWAP
