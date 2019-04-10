@@ -77,14 +77,12 @@ class CausalGraph:
         # If we are on landmark, return two states.
         entity_effects = []
 
-        # PIN: I need to make a product of these results. Somehow combine them.s
         # TODO: Ensure we only execute the non-exo variables
         for entity in entities:
             # Generate all possible effects
             entity_effects.append(entity.generate_effects())
 
-        test_product = list(product(entity_effects))
-        test_product
+        test_product = list(product(*entity_effects))
 
         return entity_effects
 
@@ -95,9 +93,11 @@ class CausalGraph:
         generated_states = []
 
         # For all entities:
-        # 1. Apply all relations.
-        # 2. Apply all derivatives.
+        # 1. Apply all derivatives.
         self._apply_derivative_to_entities(self.entities)
+
+        # 2. Apply all relations.
+        # PIN: We want to apply the relations
 
         # 3. Apply a union.
         # MAYBE SWAP
