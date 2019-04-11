@@ -97,15 +97,17 @@ class CausalGraph:
         relation_states_set = self._apply_relations_to_entities(self.entities)
 
         states = deriv_states_set | relation_states_set
-        
+
         # 4. Ensure all are consistent.
+        return states
+        
 
     def fix_consistent_states(self, states):
         # We need to check a number of things:
         # Check that simple proportional relations are met. (If one is 0 while another is +, fix it! I guess only for 0)
         # Check that VC's are met!
+        # Ensure we clip all of derivatives 
         pass
-            
 
     def propagate(self, state: tuple):
         all_possible_states = []

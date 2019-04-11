@@ -6,6 +6,7 @@ from node import Node
 class StateGraph:
     causal_graph: CausalGraph
     root: Node = None
+    foundStates: set = field(default_factory=set)
     visitedStates: set = field(default_factory=set)
 
     def build_graph(self):
@@ -13,9 +14,16 @@ class StateGraph:
         '''
 
         # We extract our current state from the causal_graph, and ensure we add it
-        current_state = self.causal_graph.state
-        self.visitedStates.add(current_state)
-        self.root = Node(current_state)
+        self.foundStates.add(self.causal_graph.state)
+        self.root = Node(self.causal_graph.state)
 
-        # We propagate and discover new states
-        possible_states = self.causal_graph.discover_states(current_state)
+        # While we sitll haven't explored all states
+        while (self.foundStates - self.visitedStates):
+            current_state = list(self.foundStates - self.visitedStates)[0]
+
+            # We propagate and discover new states
+            possible_states = self.causal_graph.discover_states(current_state)
+
+            # Ensure we denote this state as visited
+            self.visitedStates.add(current_state)
+            self.foundStates = self.foundStates | possible_states
