@@ -24,17 +24,12 @@ class CausalGraph:
         '''
         self.entities = entities
         self.relations = relations
-<<<<<<< HEAD
         self.incoming_relation_map = defaultdict(list)
 
         for rel in relations:
             self.incoming_relation_map[rel.to].append(rel)
 
         self.incoming_relation_map
-=======
-        self.entities_map = {ent.name:ent for ent in entities}
-        self.incoming_relation_map = {rel.to: rel for rel in relations }
->>>>>>> c1ce6fabeed956fcd7280b6fe8f8bcab93d56867
 
     def _to_states(self, states):
         result = []
