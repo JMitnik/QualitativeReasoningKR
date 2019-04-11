@@ -2,4 +2,4 @@
 *.png
 .vscode
 .DS_Store
-.dot
+*.dot

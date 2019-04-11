@@ -35,7 +35,7 @@ class Quantity:
         return tuple((self.mag.val, self.der.val))
 
     def constrain_extreme_derivatives(self):
-        if self.is_at_landmark():
+        if self.der.val not in self.valid_derivatives():
             self.der.val = DerivativeSpace.ZERO
 
     def generate_effects(self, derivative=None):
