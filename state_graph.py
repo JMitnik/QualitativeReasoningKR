@@ -31,3 +31,5 @@ class StateGraph:
             # Ensure we denote this state as visited
             self.visitedStates.add(current_state)
             self.foundStates = self.foundStates | possible_states
+
+        self.root

@@ -21,6 +21,9 @@ class Entity:
         quantity = Quantity(self.name, Magnitude(self.quantity.mag.q_space, entity_tuple.mag), Derivative(DerivativeSpace ,entity_tuple.der))
         return Entity(self.name, quantity)
 
+    def constrain_extreme_derivatives(self):
+        self.quantity.constrain_extreme_derivatives()
+
     def generate_effects(self):
         return self.quantity.generate_effects()
 

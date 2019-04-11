@@ -19,6 +19,10 @@ class Quantity:
     def to_tuple(self):
         return EntityTuple(self.mag.val, self.der.val)
 
+    def constrain_extreme_derivatives(self):
+        if self.is_at_landmark():
+            self.der.val = DerivativeSpace.ZERO
+
     def generate_effects(self, derivative=None):
         if not derivative:
             derivative = self.der

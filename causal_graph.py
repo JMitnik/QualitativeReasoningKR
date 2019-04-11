@@ -104,6 +104,7 @@ class CausalGraph:
     def fix_consistent_states(self, states):
         # We need to check a number of things:
         states = self.fix_VC_states(states)
+        states = self.constrain_extreme_derivatives(states)
         # Ensure we clip all of derivatives 
         return states
 
@@ -137,6 +138,23 @@ class CausalGraph:
                 result.append(state)
 
         return set(result)
+
+    def constrain_extreme_derivatives(self, states):
+        result = []
+
+        for state in states:
+            state_result = []
+            entities = self.load_entities_from_state(state)
+
+            for entity in entities:
+                entity.constrain_extreme_derivatives()
+                state_result.append(entity.to_tuple())
+            
+            result.append(tuple(state_result))
+        
+        return set(result)
+
+
 
 
 if __name__ == "__main__":
