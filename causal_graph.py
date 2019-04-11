@@ -81,6 +81,9 @@ class CausalGraph:
 
         states = list(product(*entity_effects))
 
+        # We might have some strange errors in these states. We want to ensure
+        # that our states follow the proportional principle. If one relation
+
         return set(states)
 
     def discover_states(self, state: tuple):
@@ -93,16 +96,48 @@ class CausalGraph:
 
         states = deriv_states_set | relation_states_set
 
-        # 4. Ensure all are consistent.
+        # TODO 4. Ensure all are consistent.
+        states = self.fix_consistent_states(states)
         return states
         
 
     def fix_consistent_states(self, states):
         # We need to check a number of things:
-        # Check that simple proportional relations are met. (If one is 0 while another is +, fix it! I guess only for 0)
-        # Check that VC's are met!
+        states = self.fix_VC_states(states)
         # Ensure we clip all of derivatives 
-        pass
+        return states
+
+    def load_entities_from_state(self, state):
+        result = []
+
+        for index, entity_state in enumerate(state):
+            current_entity = self.entities[index]
+            result.append(current_entity.create_new_from_tuple(entity_state))
+
+        return result
+
+    def fix_VC_states(self, states):
+        VC_relations = [relation for relation in self.relations if relation.rel_type == 'VC']
+        result = []
+
+        for state in states:
+            entities = self.load_entities_from_state(state)
+            satisfiable = True
+            # Now we have a list of entities
+            for VC_relation in VC_relations:
+                value = VC_relation.args
+                entity_from = [entity for entity in entities if entity.name ==  VC_relation.fr][0]
+                entity_to = [entity for entity in entities if entity.name ==  VC_relation.to][0]
+            
+                if (entity_from.quantity.mag.val == entity_from.quantity.mag.q_space[value]
+                    and entity_from.quantity.mag.val != entity_to.quantity.mag.val):
+                    satisfiable = False
+
+            if satisfiable:
+                result.append(state)
+
+        return set(result)
+
 
 if __name__ == "__main__":
     pass

@@ -17,6 +17,10 @@ class Entity:
         
         self.quantity.set_from_tuple(entity_tuple)
 
+    def create_new_from_tuple(self, entity_tuple: EntityTuple):
+        quantity = Quantity(self.name, Magnitude(self.quantity.mag.q_space, entity_tuple.mag), Derivative(DerivativeSpace ,entity_tuple.der))
+        return Entity(self.name, quantity)
+
     def generate_effects(self):
         return self.quantity.generate_effects()
 

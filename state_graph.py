@@ -24,6 +24,10 @@ class StateGraph:
             # We propagate and discover new states
             possible_states = self.causal_graph.discover_states(current_state)
 
+            # TODO: If we can find the node of current_state, go through each possible_state.
+            #   If a state's node doesn't exist, create the node and create an edge from the current_state's node.
+            #   If a state's node does exist, just create the edge from the current_state's node.
+
             # Ensure we denote this state as visited
             self.visitedStates.add(current_state)
             self.foundStates = self.foundStates | possible_states

@@ -35,7 +35,6 @@ class Quantity:
         # WARNING: Possibly we missed something.
         # 3. If we are here, then that means we will generate two states with
         #    the current derivative
-        
 
         valid_derivatives = self.valid_derivatives()
 
@@ -51,32 +50,9 @@ class Quantity:
         return [EntityTuple(self.mag.q_space(self.mag.val + derivative.val), derivative.val), self.to_tuple()]
 
     def apply_relations(self, relations, entities):
-
-        '''
-            1. So with our current entity, we want to start with relation A.
-
-                1. Relation A has an entity, Y.
-                2. We have two types of relations: I and P. We distinguish I and P
-
-                2a Case: I
-                    1. Then if Y has an I relation to X, but is not active, no ambiguity is added.
-                    2. If Y has a positive influence to X, and Y is active:
-                        1. Then if X is 0, we can instantly set the derivative of X to + => Effect is +
-                        2. If X is +, then the derivative of X is still +. (Amplification) => Effect is +
-                        3. If X is -, then we have an ambiguity. 
-                            => Generate multiple effects for next state: 
-                            * The resulting derivative for the next state is either +, or 0.
-                    3. If Y has a negative influence to X, and Y is active. 
-                        1. If X is 0, set derivative to negative
-                        2. If X is -, set derivative of X to be - (Amplification).
-                        3. If X is +, we have ambigutiy. => Generate multiple states, where either it remains + or become -
-                2b Case: P
-                    1. If Y has a P+ relation to X and it's derivative is active.
-                        1. If X's derivative is nonactive, then that means it will go up.
-                        2. If Y's derivative is active
-        '''
         end_states = []
 
+        # TODO: Refactor this code.
         for relation in relations:
             relation_states = []
             related_entity = [entity for entity in entities if entity.name == relation.fr][0]
