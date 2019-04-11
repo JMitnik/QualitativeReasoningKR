@@ -22,14 +22,15 @@ def main():
 
     # Build the state graph
     state_graph.build_graph()
+    state_graph.plot_graph()
 
 def bootstrap_relations(relations_specs):
     relations = []
 
     for relation_spec in relations_specs:
-        rel = Relation(relation_spec['type'], [relation_spec['from'], relation_spec['to']], relation_spec['args'])
+        rel = Relation(relation_spec['type'], relation_spec['from'], relation_spec['to'], relation_spec['args'])
         relations.append(rel)
-
+        # print(rel.fr, rel.rel_type, rel.args)
     return relations
 
 def bootstrap_entities(entities_specs):

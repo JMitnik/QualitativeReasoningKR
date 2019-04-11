@@ -18,7 +18,9 @@ class Entity:
         '''
         
         self.quantity.set_from_tuple(entity_tuple)
-
+    def __hash__(self):
+        return self.quantity.__hash__()
+        
     def generate_effects(self):
         return self.quantity.generate_effects()
     
@@ -52,7 +54,7 @@ class Entity:
             for q in qs:
                 res_li.append(Entity(self.name, q))
             # res_li.append(tmp_ent)
-        return res_li
+        return list(set(res_li))
 
 if __name__ == "__main__":
     dict_ = {'der':1, 'mag_q_space':'2', 'mag':1, 'title':'jona'}

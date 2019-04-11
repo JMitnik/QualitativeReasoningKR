@@ -5,12 +5,9 @@ from relation import Relation
 from q_spaces import DerivativeSpace, mag_q_space
 from derivative import Derivative
 from magnitude import Magnitude
-<<<<<<< HEAD
 from itertools import product
 
-=======
 from copy import deepcopy
->>>>>>> finish entity&quantity, small bug fix
 
 class CausalGraph:
     def __init__(self, entities: list, relations: list):
@@ -22,12 +19,13 @@ class CausalGraph:
         '''
         self.entities = entities
         self.relations = relations
-<<<<<<< HEAD
-        self.incoming_relation_map = {rel.to: rel for rel in relations}
-=======
         self.entities_map = {ent.name:ent for ent in entities}
-        self.incoming_relation_map = {rel.to: rel for rel in relations }
->>>>>>> finish entity&quantity, small bug fix
+        self.incoming_relation_map = {}
+        for rel in relations:
+            if self.incoming_relation_map.get(rel.to):
+                self.incoming_relation_map[rel.to].append(rel)
+            else:
+                self.incoming_relation_map[rel.to]=[rel,]
 
     def _to_states(self, states):
         result = []
@@ -39,7 +37,6 @@ class CausalGraph:
 
     def _to_state(self, entities_state):
         s = []
-
         for ent in entities_state:
             s.append(ent.to_tuple())
 
@@ -115,11 +112,7 @@ class CausalGraph:
 
     def propagate(self, state: tuple):
         all_possible_states = []
-<<<<<<< HEAD
         def new_entities(): return deepcopy(self.entities)
-=======
-        new_entities = lambda : deepcopy(self.entities_map)
->>>>>>> finish entity&quantity, small bug fix
         # 1. check the ambiguity of exogenous variable
 
         # TODO Make this a consistent Enum
@@ -129,7 +122,8 @@ class CausalGraph:
         # TODO: Make valid_derivatives method
         for valid_der in exo_var.quantity.valid_derivatives():
             new_s = new_entities()
-            new_exo_var = new_s[exo_var_n]
+            new_exo_var = new_s[0]
+            assert new_exo_var.name == exo_var_n
 
             # TODO: Make set_derivative method
             new_exo_var.quantity.set_derivative(valid_der)
@@ -146,44 +140,38 @@ class CausalGraph:
             #     if entity.quantity==0:
             #         new_s = new_entities()
             #         new_s[entity_n].apply_der()
-        new_entities += list(product(state_li_after_applying))
-
+        all_possible_states += list(product(*state_li_after_applying))
         # TODO: Create another loop which checks for exogenous states within possible ambigutiies (other than stable)
 
-        # 3. check the ambiguity of relations
-        for entity_n in self.relation_map:
-            rels = self.relation_map[entity_n]
-            rels_n = {r.ty: r for r in rels}
-            q_influence = []
-            d_influence = []
+        # # 3. check the ambiguity of relations
+        # for entity_n in self.incoming_relation_map:
+        #     rels = self.incoming_relation_map[entity_n]
+        #     rels_n = {r.rel_type: r for r in rels}
+        #     q_influence = []
+        #     d_influence = []
 
-            # {from: q1, to: q2, type: vc} , {}
-            for rel_n in rels_n:
-                rel = rels[rel_n]
-                if rel_n == 'I+':
-                    influ = self.entities[rel.fr].quantity.val * 1
-                    d_influence.append(influ)
-                if rel_n == 'I-':
-                    influ = self.entities[rel.fr].quantity.val * -1
-                    d_influence.append(influ)
-                if rel_n == 'P+':
-                    influ = self.entities[rel.fr].quantity.val * 1
-                    q_influence.append(influ)
-                if rel_n == 'P-':
-                    influ = self.entities[rel.fr].quantity.val * -1
-                    q_influence.append(influ)
-                if rel_n == 'VC':
-                    # TODO: Use entitiy instead of entity_n
-                    # TODO: Check if the 'from' enttity has reached the VC value as well
-                    self.entities[rel.to].quantity.val = self.entities[rel.fr].quantity.val
-                    break
-
+        #     # {from: q1, to: q2, type: vc} , {}
+        #     for rel_n in rels_n:
+        #         rel = rels_n[rel_n]
+        #         if rel_n == 'I+':
+        #             influ = self.entities_map[rel.fr].quantity.mag.val * 1
+        #             d_influence.append(influ)
+        #         if rel_n == 'I-':
+        #             influ = self.entities_map[rel.fr].quantity.mag.val * -1
+        #             d_influence.append(influ)
+        #         if rel_n == 'P+':
+        #             influ = self.entities_map[rel.fr].quantity.mag.val * 1
+        #             q_influence.append(influ)
+        #         if rel_n == 'P-':
+        #             influ = self.entities_map[rel.fr].quantity.mag.val * -1
+        #             q_influence.append(influ)
+        #         if rel_n == 'VC':
+        #             # TODO: Use entitiy instead of entity_n
+        #             # TODO: Check if the 'from' enttity has reached the VC value as well
+        #             self.entities_map[rel.to].quantity.mag.val = self.entities_map[rel.fr].quantity.mag.val
+        #             break
+        # print((all_possible_states[2]))
             # If q and d influence have conflicts, generate new states and append
-<<<<<<< HEAD
-
-
-=======
-        return self._to_states(new_entities)
->>>>>>> finish entity&quantity, small bug fix
+        return self._to_states(all_possible_states)
 if __name__ == "__main__":
     pass
