@@ -1,6 +1,12 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 @dataclass
 class Node:
-    children: List[Node]
-    parents: Node = None
+    state: tuple
+    note: str = ''
+
+@dataclass
+class Edge:
+    _from: Node = None
+    _to: Node = None
+    note: str = ''

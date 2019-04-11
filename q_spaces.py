@@ -7,7 +7,7 @@ class MagThreeSpace(IntEnum):
 
 class MagTwoSpace(IntEnum):
     ZERO = 0
-    MAX = 1
+    PLUS = 1
 
 class DerivativeSpace(IntEnum):
     NEG = -1
