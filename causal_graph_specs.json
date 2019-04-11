@@ -14,20 +14,26 @@
         {
             "type": "I-",
             "args": "None",
-            "from": "inflow",
+            "from": "outflow",
             "to": "container"
         },
         {
-            "type": "I+",
+            "type": "P+",
             "args": "None",
-            "from": "inflow",
-            "to": "container"
+            "from": "container",
+            "to": "outflow"
         },
         {
-            "type": "I+",
-            "args": "None",
-            "from": "inflow",
-            "to": "container"
+            "type": "VC",
+            "args": "MAX",
+            "from": "container",
+            "to": "outflow"
+        },
+        {
+            "type": "VC",
+            "args": "ZERO",
+            "from": "container",
+            "to": "outflow"
         }
     ]
 }

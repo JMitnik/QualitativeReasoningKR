@@ -30,7 +30,7 @@ class StateGraph:
         state = node.state
         while not stop:
             stop = True
-            for s in self.causal_graph.propagate(state):
+            for s in self.causal_graph.discover_states(state):
                 # print(stop)
                 child_node = Node(s)
                 if tuple2str(s) not in self.visitedStates:
@@ -60,7 +60,7 @@ class StateGraph:
                 A.add_edge(tuple2str(from_state), tuple2str(to_state))
         A.write("result.dot") # write to simple.dot
         print("Wrote result.dot")
-        A.draw('result.png',prog="circo") # draw to png using circo
+        A.draw('result.png',prog="dot") # draw to png using circo
         print("Wrote result.png")
 
             

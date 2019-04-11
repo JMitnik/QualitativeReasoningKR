@@ -11,5 +11,9 @@ class Derivative:
         enum_map = {0: DerivativeSpace.ZERO,
                     1: DerivativeSpace.PLUS, -1: DerivativeSpace.NEG}
         self.val = enum_map[num]
+
+    def __hash__(self):
+        return hash(str(self.val)+str(self.space))
+
 if __name__ == "__main__":
     Derivative().set_to(1)

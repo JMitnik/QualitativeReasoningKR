@@ -21,8 +21,19 @@ class Entity:
     def __hash__(self):
         return self.quantity.__hash__()
         
+
+    def create_new_from_tuple(self, entity_tuple: EntityTuple):
+        quantity = Quantity(self.name, Magnitude(self.quantity.mag.q_space, entity_tuple.mag), Derivative(DerivativeSpace ,entity_tuple.der))
+        return Entity(self.name, quantity)
+
+    def constrain_extreme_derivatives(self):
+        self.quantity.constrain_extreme_derivatives()
+
     def generate_effects(self):
         return self.quantity.generate_effects()
+
+    def apply_relations(self, relations, entities):
+        return self.quantity.apply_relations(relations, entities)
     
     def to_tuple(self):
         return self.quantity.to_tuple()
