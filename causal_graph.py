@@ -91,8 +91,15 @@ class CausalGraph:
         '''
         self._load_state(state)
         # TODO: Include exo variables
+
         deriv_states_set = self._apply_derivative_to_entities(self.entities)
         relation_states_set = self._apply_relations_to_entities(self.entities)
+        
+        # PIN: Currently, we have the proportional relations in opposite directions ocassionally.
+        # PIN: Also, possibly might be pruning too many states, but can't be sure yet.
+        # FIXME The implemenetation suggests that it might be possible if say, relation has been going downhill,
+        # and the other relation suddenly goes uphill twice, but in theory can't convince the downhill proportionality.
+        # This might be a problem coming from the relations.
 
         states = deriv_states_set | relation_states_set
 
