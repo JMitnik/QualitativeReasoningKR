@@ -5,14 +5,10 @@ from relation import Relation
 from q_spaces import DerivativeSpace, mag_q_space
 from derivative import Derivative
 from magnitude import Magnitude
-<<<<<<< HEAD
 from itertools import product
 
 from copy import deepcopy
 from collections import defaultdict
-=======
-from copy import deepcopy
->>>>>>> c1ce6fabeed956fcd7280b6fe8f8bcab93d56867
 
 class CausalGraph:
     def __init__(self, entities: list, relations: list):
@@ -185,72 +181,5 @@ class CausalGraph:
             # Add in entities.
             entity_template = 'In this state, our {} has reached value {}.'.format
 
-<<<<<<< HEAD
-
-=======
-    def propagate(self, state: tuple):
-        all_possible_states = []
-        new_entities = lambda : deepcopy(self.entities_map)
-        # 1. check the ambiguity of exogenous variable
-
-        # TODO Make this a consistent Enum
-
-        exo_var_n = 'inflow'
-        exo_var = self.entities_map[exo_var_n]
-        # TODO: Make valid_derivatives method
-        for valid_der in exo_var.quantity.valid_derivatives():
-            new_s = new_entities()
-            new_exo_var = new_s[exo_var_n]
-
-            # TODO: Make set_derivative method
-            new_exo_var.quantity.set_derivative(valid_der)
-            all_possible_states.append(new_s)
-
-        # 2. check the ambiguity of derivative applying
-        state_li_after_applying = []
-
-        for entity_n in self.entities_map:
-            entity = self.entities_map[entity_n]
-            ent_li = entity.apply_der()
-            state_li_after_applying.append(ent_li)
-            # if entity.derivative!=0:
-            #     if entity.quantity==0:
-            #         new_s = new_entities()
-            #         new_s[entity_n].apply_der()
-        new_entities+=list(product(state_li_after_applying))
-
-        # TODO: Create another loop which checks for exogenous states within possible ambigutiies (other than stable)
-
-        # 3. check the ambiguity of relations
-        for entity_n in self.relation_map:
-            rels = self.relation_map[entity_n]
-            rels_n = {r.ty:r for r in rels}
-            q_influence = []
-            d_influence = []
-
-            # {from: q1, to: q2, type: vc} , {}
-            for rel_n in rels_n:
-                rel = rels[rel_n]
-                if rel_n == 'I+':
-                    influ = self.entities[rel.fr].quantity.val * 1
-                    d_influence.append(influ)
-                if rel_n == 'I-':
-                    influ = self.entities[rel.fr].quantity.val * -1
-                    d_influence.append(influ)
-                if rel_n == 'P+':
-                    influ = self.entities[rel.fr].quantity.val * 1
-                    q_influence.append(influ)
-                if rel_n == 'P-':
-                    influ = self.entities[rel.fr].quantity.val * -1
-                    q_influence.append(influ)
-                if rel_n == 'VC':
-                    # TODO: Use entitiy instead of entity_n
-                    # TODO: Check if the 'from' enttity has reached the VC value as well
-                    self.entities[rel.to].quantity.val = self.entities[rel.fr].quantity.val
-                    break
-
-            # If q and d influence have conflicts, generate new states and append
-        return self._to_states(new_entities)
->>>>>>> c1ce6fabeed956fcd7280b6fe8f8bcab93d56867
 if __name__ == "__main__":
     pass
