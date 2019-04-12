@@ -24,16 +24,22 @@ A=AGraph()
 # set some default node attributes
 A.node_attr['style']='filled'
 A.node_attr['shape']='box'
-A.node_attr['fixedsize']='true'
+# A.node_attr['fixedsize']='true'
 A.node_attr['fontcolor']='#FFFFFF'
 
 # make a star in shades of red
-for i in range(16):
-    A.add_edge(0,"{}\n\tfdsf".format(i))
-    n = A.get_node("{}\n\tfdsf".format(i))
-    n.attr['fillcolor']="#%2x0000"%(i*16)
-    n.attr['height']="%s"%(i/16.0+0.5)
-    n.attr['width']="%s"%(i/16.0+0.5)
+# for i in range(16):
+#     A.add_edge(0,"{}\n\tfdsf".format(i))
+#     n = A.get_node("{}\n\tfdsf".format(i))
+#     n.attr['fillcolor']="#%2x0000"%(i*16)
+#     n.attr['height']="%s"%(i/16.0+0.5)
+#     n.attr['width']="%s"%(i/16.0+0.5)
+
+n1 = '+ 0\n+ 1\n+ 1'
+n2 = '+ 0\n+ 1\n+ 1'
+
+A.add_edge()
+A.add_edge('+ 0\n+ 1\n+ 1')
 
 print(A.string()) # print to screen
 A.write("star.dot") # write to simple.dot

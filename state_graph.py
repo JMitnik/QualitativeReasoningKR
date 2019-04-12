@@ -17,7 +17,7 @@ class StateGraph:
 
         # We extract our current state from the causal_graph, and ensure we add it
         current_state = self.causal_graph.state
-        self.visitedStates[tuple2str(current_state)] = True
+        self.visitedStates[str(current_state)] = True
         self.root = Node(current_state)
 
         # We propagate and discover new states
@@ -33,13 +33,14 @@ class StateGraph:
             for s in self.causal_graph.discover_states(state):
                 # print(stop)
                 child_node = Node(s)
-                if tuple2str(s) not in self.visitedStates:
+                if str(s) not in self.visitedStates:
                     stop = False
-                    self.visitedStates[tuple2str(s)] = True
+                    self.visitedStates[str(s)] = True
                     # print(state)
-                    self.dfs(child_node)
+                    # self.dfs(child_node)
                 self.edges.append(Edge(node, child_node, ''))
                     # continue
+            break
         return 
 
     def plot_graph(self):
@@ -50,14 +51,14 @@ class StateGraph:
         A.node_attr['style']='filled'
         A.node_attr['shape']='box'
         # A.node_attr['fixedsize']='true'
-        A.node_attr['fontcolor']='#444'
+        A.node_attr['fontcolor']='#fff'
 
         for edge in self.edges:
             # print(edge)
             from_state = edge._from.state
             to_state = edge._to.state
-            if from_state != to_state:
-                A.add_edge(tuple2str(from_state), tuple2str(to_state))
+            if str(from_state) != str(to_state):
+                A.add_edge(str(from_state), str(to_state))
         A.write("result.dot") # write to simple.dot
         print("Wrote result.dot")
         A.draw('result.png',prog="dot") # draw to png using circo
