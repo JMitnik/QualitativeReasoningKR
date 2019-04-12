@@ -68,31 +68,25 @@ class CausalGraph:
                 except:
                     # No incoming relations found, we don't have anything to apply.
                     s_res[i]+=([deepcopy(ent)])
-                    print('rua')
+                    # print('rua')
                     continue
                 if len(incoming_relations)==0:
                     s_res[i]+=([deepcopy(ent)])
                     continue
                 # print(ent)
-                for rel in incoming_relations:
-                    if not rel.rel_type.startswith(ty):
-                        if (ent) not in s_res[i]:
-                            s_res[i]+=([deepcopy(ent)])
-                        continue
-                    relation_results = ent.apply_relations_v2([rel], s)
+                incoming_relations = [
+                    rel for rel in incoming_relations if rel.rel_type.startswith(ty)]
+                # print(incoming_relations, ent.name, '\n')
+                # for rel in incoming_relations:
+                #     if not rel.rel_type.startswith(ty):
+                #         continue
+                if len(incoming_relations)==0:
+                    if (ent) not in s_res[i]:
+                        s_res[i]+=([deepcopy(ent)])
+                    continue
+                relation_results = ent.apply_relations_v2(incoming_relations, s)
                     # print(ent, relation_results)
-                    s_res[i]+=(relation_results)
-                    # ent_tmp_li = []
-                    # if relation_results:
-                    #     for ent_res in relation_results:
-                    #         ent_n = deepcopy(ent)
-                    #         # new_entities = list(new_entities)
-                    #         ent_n = ent_n.create_new_from_tuple(ent_res)
-                    #         ent_tmp_li.append(ent_n)
-                    # else:
-                    #     ent_n = deepcopy(ent)
-                    #     ent_tmp_li.append(ent_n)
-            # print(s_res)
+                s_res[i]+=(relation_results)
             s_res = [s.gen_child(deepcopy(ss)) for ss in product(*s_res)]
             result+=s_res
 
@@ -127,10 +121,10 @@ class CausalGraph:
         # print(states)
         tmp  =[]
         for s in states:
-            print(s[0])
+            # print(s[0])
             tmp.append(tuple([tuple([EntityTuple(q.mag.val, q.der.val) for q in s])]))
         states = tuple(tmp)
-        print(states[0])
+        # print(states[0])
         # We might have some strange errors in these states. We want to ensure
         # that our states follow the proportional principle. If one relation
 
@@ -143,7 +137,7 @@ class CausalGraph:
             for ent in state:
                 if ent.name == 'inflow':
                     ns = deepcopy(state)
-                    nent = ent.set_der_v2(state.pop_exo())
+                    nent = ent.set_der_v2(ns.pop_exo())
                     ns[ent.name] = nent
                     res+=[ns, deepcopy(state)]
         return res
