@@ -43,6 +43,7 @@ class Quantity:
             derivative = self.der.val
         else:
             derivative = int(derivative)
+        
         # Checks:
         #  1. Ensure that if we are at landmark, we would generate at most one
         #       state.

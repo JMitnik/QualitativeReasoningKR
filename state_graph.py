@@ -50,7 +50,7 @@ class StateGraph:
         A.node_attr['style']='filled'
         A.node_attr['shape']='box'
         # A.node_attr['fixedsize']='true'
-        A.node_attr['fontcolor']='#000000'
+        A.node_attr['fontcolor']='#444'
 
         for edge in self.edges:
             # print(edge)
