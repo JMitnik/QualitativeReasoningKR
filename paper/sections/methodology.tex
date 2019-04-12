@@ -23,12 +23,13 @@ to zero. This way, the state will instantly achieve maximum without insinuating
 that there is more to come, or less to come on a minimum state.
 
 \subsection{Generating a state-graph}
-\textit{Representing the state-graph}. A state-graph is initialized with an empty node. This node contains a collection
-of the different magnitudes and derivatives of a quantity, which is referred to
-as a state. By turning these values of the entities into a string, it is
-possible to hash a state by the string representation of all these values. This
-will be important when storing each state in a global variable `visitedStates',
-which keeps track of new encountered variables. 
+\textit{Representing the state-graph}. A state-graph is initialized with an
+empty node. This node contains a collection of the different magnitudes and
+derivatives of a quantity, which is referred to as a state. By turning these
+values of the entities into a string, it is possible to hash a state by the
+string representation of all these values. This will be important when storing
+each state in a global variable `visitedStates', which keeps track of new
+encountered variables. 
 
 \textit{Generating new states}. Upon entering a state, the main goal is to apply
 a number of functions on the value of the entities, and to generate as many
@@ -40,6 +41,30 @@ state. However, due to the nature of intervals as explained in
 the interval or to the next state in the quantity space: as such, these possible
 ambiguity leads to an additional child being generated to account for this
 chance. The second stage is to apply the current relations to the states. This
-can be intra-state and immediately (e.g. apply when no ambiguities are present),
-or the examined state is split into multiple states with different outcomes.
-First, any influence relations are applied, and then the 
+can either change the state immediately (e.g. apply when no ambiguities are
+present), or the examined state is split into multiple states with different
+outcomes based on the ambiguities to resolve. The order of resolution is to
+start with ensuring influence relations first, due to the nature of the causal
+graph of this project: the container is affected first by its ambiguities, and
+the outflow always follows due to the Value Correspondence and proportionality
+relationships as stated in section \ref{sec: domain}. This will output a wide
+list of children, each represented as a State with its own individual hashable
+value. Finally, to account for the exogenous variables, each stack will have a
+reference to a stack which is copied to each child. This stack represents the
+'lifecycle' of the exogenous pattern, and denotes which of the actions have been
+taken related to the pattern of the exogenous variable. For instance, because
+this application uses the parabola, the initial state starts with 0 and will
+follow a derivative incline of 1, followed by an eventual decline back to 0. For
+each transition, a value of the stack is popped, until the stack is empty, and
+the exogenous variable remains constant at 0. The ambiguity arises when in the
+generation this applies, and so, each state accounts for the possibility. After
+applying the exogenous variability, the remaining step is to check for
+consistency. This is done by pruning all of the states which do not follow the
+value correspondence relations, and by setting the derivatives for entities
+which have arrived at their maximum and minimum landmark, to be zero.
+
+\textit{Exploring all states}
+With the new list of states, a depth first search is done to continue exploring
+until no new states can be found eventually. For each time that a state
+generates a new state, a Node is created for a parent and for the children. The
+edges generated to connect the parent to the children.
