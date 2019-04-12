@@ -97,10 +97,10 @@ class Quantity:
         for rel_n in rels:
             rel = rels[rel_n]
             if rel_n == 'I+':
-                influ = state[rel.fr].quantity.mag.val * 1
+                influ = state[rel.fr].quantity.mag.effect() * 1
                 d_influence.append(influ)
             if rel_n == 'I-':
-                influ = state[rel.fr].quantity.mag.val * -1
+                influ = state[rel.fr].quantity.mag.effect() * -1
                 d_influence.append(influ)
             if rel_n == 'P+':
                 influ = state[rel.fr].quantity.der.val * 1
@@ -108,20 +108,27 @@ class Quantity:
             if rel_n == 'P-':
                 influ = state[rel.fr].quantity.der.val * -1
                 q_influence = influ
-        prune_val = lambda x: [self.der.val+i for i in x if (self.der.val+i) in 
-                        self.valid_derivatives()]
-        print(prune_val([-1, 0, 1]), '\n',
-              self.valid_derivatives(), '\n', self.der.val, '\n', (self.der.val+1))
+        prune_val = lambda x: [i+self.der.val for i in x if ((self.der.val+i) in 
+                        self.valid_derivatives())]
+        # print([int(i) for i in self.valid_derivatives()])
+        # print([int(i) for i in self.valid_derivatives()])
+        # print(d_influence)
+        # print(prune_val([-1, 0, 1]), '\n',
+            #   self.valid_derivatives(), '\n', self.der.val, '\n', (self.der.val+1))
         if -1 in d_influence and 1 in d_influence:
             return self.set_der_v2(prune_val([-1, 0, 1]))
         elif -1 in d_influence:
-            return self.set_der_v2(prune_val([-1]))
+            return self.set_der_v2(prune_val([-1,0]))
         elif 1 in d_influence:
-            return self.set_der_v2(prune_val([1]))
+            return self.set_der_v2(prune_val([1,0]))
+        elif 0 in d_influence:
+            return self.set_der_v2(prune_val([0]))
         if not (q_influence is None):
             return self.set_der_v2(([q_influence, ]))
         # print(relations, state)
-        raise ValueError()
+        # print(self.mag.val)
+        return self.set_der_v2([self.der.val,])
+        # raise ValueError()
 
     def apply_relations(self, relations, entities):
         end_states = []
