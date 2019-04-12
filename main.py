@@ -23,7 +23,7 @@ def main():
     # Build the state graph
     state_graph.build_graph()
 
-    state_graph.get_inter_state_trace(0, 1)
+    state_graph.get_state_trace(1)
 
     state_graph.plot_graph()
 
