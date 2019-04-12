@@ -23,6 +23,23 @@ to zero. This way, the state will instantly achieve maximum without insinuating
 that there is more to come, or less to come on a minimum state.
 
 \subsection{Generating a state-graph}
-The construction of a state-graph begins is initialized with an empty node. This
-node contains a collection of the different magnitudes and derivatives of a
-quantity, which is represented as a state. When the state-graph is started
+\textit{Representing the state-graph}. A state-graph is initialized with an empty node. This node contains a collection
+of the different magnitudes and derivatives of a quantity, which is referred to
+as a state. By turning these values of the entities into a string, it is
+possible to hash a state by the string representation of all these values. This
+will be important when storing each state in a global variable `visitedStates',
+which keeps track of new encountered variables. 
+
+\textit{Generating new states}. Upon entering a state, the main goal is to apply
+a number of functions on the value of the entities, and to generate as many
+possible children as possible. This is done in three stages: first apply the
+current derivatives on the children. If the magnitude value of an entity's
+quantity is on a landmark (such as zero and maximum), this will produce a single
+state. However, due to the nature of intervals as explained in
+\cite{Bredeweg06garp3-}, the values could either transition to another value in
+the interval or to the next state in the quantity space: as such, these possible
+ambiguity leads to an additional child being generated to account for this
+chance. The second stage is to apply the current relations to the states. This
+can be intra-state and immediately (e.g. apply when no ambiguities are present),
+or the examined state is split into multiple states with different outcomes.
+First, any influence relations are applied, and then the 
