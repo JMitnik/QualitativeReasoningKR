@@ -4,19 +4,25 @@
 Within the frame of this assignment, a number of assumptions were made when
 implementing a set of rules for the generation of the state graph. The level of
 
-\textit{Domain assumptions}
 Aside from the given constraints regarding the domain's relations, a number of
-additional constraints were set as inferred by the existing ones. One such a
-constraint is a quantity correspondence from the Container to the Outflow. Due
-to the previously mentioned proportional
-\textit{Intra-state assumptions}
+additional constraints were set as inferred by the existing ones. The exogenous
+variable, the inflow, has been set to be a binary variable, which means that
+either the sink is on in an instant, or it is off: this is to simplify the
+unnecessary amount of states which may not add much to the model itself.
+Furthermore, the exogenous variable will be modeled based off a negative
+parabola. The reason a negative parabola is chosen, is twofold: a real
+interaction with a sink would go in the way off washing hands (on), then turning
+it off, and turning it on yet again after some time went by. As such, a negative
+parabola starts this pattern immediately, and can represent the inactivity (drainage)
+of a sink as well as the reactivation.
 
-% Assumption: Our exogenous variable is binary, either it is on or off.
-
-% Assumption: Ambiguities will always be generated if an entity's derivative is
-% already set and a relation tries to change the derivative Assumption.
-
-% Assumption: An intra-state transition is that if an entity reaches its max and
-% min landmark, its derivative instantly becomes 0.
+Furthermore, the representation to a real sink is taken further to the landmark
+states of our container. If the container, and by proxy the outflow, reaches a
+maximum or minimum, then the derivatives are instantly set within the same state
+to zero. This way, the state will instantly achieve maximum without insinuating
+that there is more to come, or less to come on a minimum state.
 
 \subsection{Generating a state-graph}
+The construction of a state-graph begins is initialized with an empty node. This
+node contains a collection of the different magnitudes and derivatives of a
+quantity, which is represented as a state. When the state-graph is started

@@ -1,1 +1,27 @@
 \section{The Domain: Causal Model}
+
+\begin{figure}
+    \includegraphics[width=65mm]{assets/causal_graph.png}
+    \caption{Causal model of the sink}
+    \label{fig:causal_model}
+\end{figure}
+
+The constraints as presented within the frame of this assignment consist of the
+the following:
+\begin{itemize}
+    \item A P+ (positive proportional) relationship from Container to Outflow.
+    This insinuates that whenever the Container's derivative, the outflow goes
+    through a proportional change for its derivative.
+    \item A I+ (influential positive) from Inflow to Container. Whenever the
+    inflow is active, which is understood as having a magnitude greater than
+    zero, the container will be influenced to increase (thus setting the
+    derivative above zero).
+    \item An I- relation from Outflow to Container. The existence of the outflow
+    means that there water in the container is decreasing.
+    \item A VC (value correspondence) from the containers max value to the outflow's
+    max. If the container reaches the top, the outflow will also be at its strongest.
+    \item A VC relation from the containers empty value to the outflow's empty.
+    With no water in the container, there is no water to be flowing out.
+\end{itemize}
+
+Figure \ref{fig:causal_model} captures this relationship.
