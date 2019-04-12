@@ -80,6 +80,7 @@ class CausalGraph:
                 # for rel in incoming_relations:
                 #     if not rel.rel_type.startswith(ty):
                 #         continue
+                # print(incoming_relations)
                 if len(incoming_relations)==0:
                     if (ent) not in s_res[i]:
                         s_res[i]+=([deepcopy(ent)])
@@ -151,7 +152,7 @@ class CausalGraph:
         deriv_states = self._apply_derivative_to_entities_v2(self.state)
         relation_states = self._apply_relations_to_entities(deriv_states, 'I')
         relation_states = self._apply_relations_to_entities(relation_states, 'P')
-        # exo_states = self._apply_exo_var(relation_states)
+        exo_states = self._apply_exo_var(relation_states)
         
         # PIN: Currently, we have the proportional relations in opposite directions ocassionally.
         # PIN: Also, possibly might be pruning too many states, but can't be sure yet.
@@ -161,8 +162,8 @@ class CausalGraph:
 
         # states = deriv_states_set | relation_states_set
         # TODO 4. Ensure all are consistent.
-        # states = self.fix_consistent_states_v2(exo_states)
-        states = relation_states
+        states = self.fix_consistent_states_v2(exo_states)
+        # states = relation_states
         return states
         
 
@@ -173,14 +174,21 @@ class CausalGraph:
         # Ensure we clip all of derivatives 
         return states
 
+    def fix_consistent_states_v2(self, states):
+        # We need to check a number of things:
+        states = self.fix_VC_states_v2(states)
+        states = self.constrain_extreme_derivatives_v2(states)
+        # Ensure we clip all of derivatives 
+        return states
+
     def load_entities_from_state(self, state):
         result = []
 
         # print(state)
-        if len(state)==1:
+        if isinstance(state, list):
             state = state[0]
         for index, entity_state in enumerate(state):
-            current_entity = self.entities[index]
+            current_entity = self.state[index]
             result.append(current_entity.create_new_from_tuple(entity_state))
 
         return result
@@ -190,7 +198,7 @@ class CausalGraph:
         result = []
 
         for state in states:
-            state = self.load_entities_from_state(state)
+            # state = self.load_entities_from_state(state)
             satisfiable = True
             # Now we have a list of state
             for VC_relation in VC_relations:

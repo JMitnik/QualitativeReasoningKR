@@ -1,6 +1,6 @@
 class State(object):
 
-    def __init__(self, state_tup, exo_stack=[-1, 1]):
+    def __init__(self, state_tup, exo_stack=[-1, 0]):
         self.state_tup = list(state_tup)
         self.state_dict = {e.name:e for e in state_tup}
         self.exo_stack = exo_stack

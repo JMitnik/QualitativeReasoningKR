@@ -7,3 +7,6 @@
 
 paper/main.aux
 paper/main.out
+*.log
+*.gz
+*.synctex

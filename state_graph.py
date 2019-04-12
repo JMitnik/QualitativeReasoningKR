@@ -46,12 +46,12 @@ class StateGraph:
                     stop = False
                     self.visitedStates[str(s)] = True
                     # print(state)
-                    # self.dfs(child_node)
+                    self.dfs(child_node)
+                # self.edges.append(Edge(node, child_node, ''))
+#                     # self.dfs(child_node)
                 self.nodeCount += 1
                 child_node.index = self.nodeCount
                 self.edges.append(Edge(node, child_node))
-                    # continue
-            break
         return 
 
     def get_state_trace(self, node_index):
@@ -127,6 +127,8 @@ class StateGraph:
         A.node_attr['shape']='box'
         # A.node_attr['fixedsize']='true'
         A.node_attr['fontcolor']='#fff'
+        is_terminal = {}
+        # for edge in self.edges:
 
         for index, edge in enumerate(self.edges):
             # print(edge)
@@ -134,8 +136,22 @@ class StateGraph:
             to_node = edge._to
             from_state = edge._from.state
             to_state = edge._to.state
+            is_terminal[str(from_state)] = False
+            is_terminal[str(to_state)] = False
             if str(from_state) != str(to_state):
-                A.add_edge(str(from_node), str(to_node), index)
+                # A.add_edge(str(from_state), str(to_state))
+              A.add_edge(str(from_state), str(to_state), index)
+
+        print(A.number_of_edges())
+        print(A.number_of_nodes())
+        # for d in A.degree(with_labels=True):
+        for edge in self.edges:
+            from_state = edge._from.state
+            is_terminal[str(from_state)] = True            
+            # print(d)
+        # print(A.nodes())
+        s = [k for k in is_terminal if not (is_terminal[k])]
+        print(len(s))
 
         A.write("result.dot") # write to simple.dot
 
