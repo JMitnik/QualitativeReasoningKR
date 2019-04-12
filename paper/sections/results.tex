@@ -1,1 +1,36 @@
 \section{Results}
+\subsection{Trace}
+The trace in the algorithm can indicate a number of difference between two
+states, such as quantities. The built-in traces either can focus on the state
+itself, or between states, such as in figures \ref{fig:trace_intra.png}
+\ref{fig:trace_inter.png} respectively.
+
+\begin{figure}
+    \includegraphics[width=65mm]{assets/trace_inter.png}
+    \caption{Inter-state trace}
+    \label{fig:trace_inter.png}
+\end{figure}
+
+\begin{figure}
+    \includegraphics[width=65mm]{assets/trace_intra.png}
+    \caption{Intra-state trace}
+    \label{fig:trace_intra.png}
+\end{figure}
+
+\subsection{State graph}
+The generated state graph resulted in approximately 37 states. Initially it
+seems difficult to follow the state graph. From an implementation standpoint,
+the intuition that accompanies the interpretation of the state graph is derived
+from mostly building the model. By pruning the states, the state graph
+represents the rules setup well and established.
+
+It is interesting that not many clear termination or stable nodes can be found.
+One of the more surprising findings aside from that is how many states are
+generated from these three simple interactions between entities. The exogenous
+variable's pattern (parabola) doesn't seem to have much impact on the state
+graph rather than allowing for a larger number of extra states. 
+
+There are often transitions between states in which they seem to fall back and
+jump between each other. This often happens in intervals, where an interval
+might refer often to itself, and just as easily could jump between landmark
+states.
