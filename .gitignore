@@ -4,3 +4,6 @@
 .DS_Store
 *.dot
 *.pdf
+
+paper/main.aux
+paper/main.out
