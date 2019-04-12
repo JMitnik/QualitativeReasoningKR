@@ -1,8 +1,8 @@
 {
     "entities": [
-        { "title": "inflow", "mag_value": "0", "mag_q_space": "2", "d_value": "1", "exo": true },
-        { "title": "container", "mag_value": "0", "mag_q_space": "3", "d_value": "0", "exo": false },
-        { "title": "outflow", "mag_value": "0", "mag_q_space": "3", "d_value": "0", "exo": false }
+        { "title": "inflow", "mag_value": "1", "mag_q_space": "2", "d_value": "0", "exo": true },
+        { "title": "container", "mag_value": "1", "mag_q_space": "3", "d_value": "1", "exo": false },
+        { "title": "outflow", "mag_value": "1", "mag_q_space": "3", "d_value": "1", "exo": false }
     ],
     "relations": [
         {

@@ -21,6 +21,10 @@ class Entity:
     def __hash__(self):
         return self.quantity.__hash__()
         
+    def change_quantity(self, quantity):
+        if isinstance(quantity, list):
+            return [Entity(self.name, q) for q in quantity]
+        return Entity(self.name, quantity)
 
     def create_new_from_tuple(self, entity_tuple: EntityTuple):
         quantity = Quantity(self.name, Magnitude(self.quantity.mag.q_space, entity_tuple.mag), Derivative(DerivativeSpace ,entity_tuple.der))
@@ -31,9 +35,14 @@ class Entity:
 
     def generate_effects(self):
         return self.quantity.generate_effects()
+    def generate_effects_v2(self):
+        return self.change_quantity(self.quantity.generate_effects())
 
     def apply_relations(self, relations, entities):
         return self.quantity.apply_relations(relations, entities)
+
+    def apply_relations_v2(self, relations, entities):
+        return self.change_quantity(self.quantity.apply_relations_v2(relations, entities))
     
     def to_tuple(self):
         return self.quantity.to_tuple()
@@ -55,6 +64,14 @@ class Entity:
 
     def set_der(self, der_val):
         self.quantity.set_derivative(der_val)
+    
+    def set_der_v2(self, der_val):
+        # res = []
+        # for der in der_vals:
+        e = deepcopy(self)
+        e.quantity.set_derivative(der_val)
+        # res.append(e)
+        return e
 
     def apply_der(self):
         res_li = []

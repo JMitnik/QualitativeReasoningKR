@@ -83,6 +83,46 @@ class Quantity:
             q.der.set_to(0)
         return q
 
+    def set_der_v2(self, der):
+        new_q = lambda d:Quantity(self.name, deepcopy(self.mag), deepcopy(self.der).set_to(d))
+        if isinstance(der, list):
+            return [new_q(d) for d in der]
+        return new_q(der)
+
+    def apply_relations_v2(self, relations, state):
+        end_states = []
+        rels = {rel.rel_type:rel for rel in relations}
+        d_influence = []
+        q_influence = None
+        for rel_n in rels:
+            rel = rels[rel_n]
+            if rel_n == 'I+':
+                influ = state[rel.fr].quantity.mag.val * 1
+                d_influence.append(influ)
+            if rel_n == 'I-':
+                influ = state[rel.fr].quantity.mag.val * -1
+                d_influence.append(influ)
+            if rel_n == 'P+':
+                influ = state[rel.fr].quantity.der.val * 1
+                q_influence = influ
+            if rel_n == 'P-':
+                influ = state[rel.fr].quantity.der.val * -1
+                q_influence = influ
+        prune_val = lambda x: [self.der.val+i for i in x if (self.der.val+i) in 
+                        self.valid_derivatives()]
+        print(prune_val([-1, 0, 1]), '\n',
+              self.valid_derivatives(), '\n', self.der.val, '\n', (self.der.val+1))
+        if -1 in d_influence and 1 in d_influence:
+            return self.set_der_v2(prune_val([-1, 0, 1]))
+        elif -1 in d_influence:
+            return self.set_der_v2(prune_val([-1]))
+        elif 1 in d_influence:
+            return self.set_der_v2(prune_val([1]))
+        if not (q_influence is None):
+            return self.set_der_v2(([q_influence, ]))
+        # print(relations, state)
+        raise ValueError()
+
     def apply_relations(self, relations, entities):
         end_states = []
 
@@ -184,6 +224,12 @@ class Quantity:
 
 if __name__ == "__main__":
     q = Quantity("Test", Magnitude(MagTwoSpace, 1), Derivative(val=0))
+    from relation import Relation
+    from state import State
+    rel = Relation('I+', 'a', 'b')
+    rel = Relation('I-', 'a', 'b')
+    
+    q.apply_relations_v2()
     print(q.valid_derivatives())
     print(q.generate_effects(0))
     s = {q:1}
